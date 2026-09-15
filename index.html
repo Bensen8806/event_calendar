@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="NSSCE Event Management and Venue Booking System — NSS College of Engineering, Palakkad. Submit, track, and manage campus event requests with role-based approvals.">
   <title>NSSCE Event Management System — NSS College of Engineering, Palakkad</title>
+  <link rel="icon" type="image/jpeg" href="favicon.jpg">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -236,75 +237,64 @@
       overflow: hidden;
     }
 
-    .hv-bar {
-      background: var(--primary);
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      gap: 7px;
-    }
-
-    .hv-bar-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.25);
-    }
-
-    .hv-bar-title {
-      font-size: 12px;
-      font-weight: 600;
-      color: rgba(255,255,255,0.75);
-      margin-left: 4px;
-      letter-spacing: 0.2px;
-    }
-
-    .hv-body { padding: 20px; }
-
-    .flow-step {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      padding: 14px 0;
+    .hv-label {
+      padding: 18px 22px 10px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.4px;
+      color: var(--muted-foreground);
       border-bottom: 1px solid var(--border);
     }
 
-    .flow-step:last-child { border-bottom: none; }
+    .hv-body { padding: 22px; }
 
-    .step-number {
-      width: 26px;
-      height: 26px;
+    /* Vertical timeline */
+    .timeline { position: relative; padding-left: 16px; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 5px;
+      top: 8px;
+      bottom: 8px;
+      width: 1px;
+      background: var(--border-strong);
+    }
+
+    .tl-item {
+      position: relative;
+      padding: 0 0 26px 20px;
+    }
+    .tl-item:last-child { padding-bottom: 0; }
+
+    .tl-dot {
+      position: absolute;
+      left: -11px;
+      top: 5px;
+      width: 9px;
+      height: 9px;
       border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      font-weight: 700;
-      flex-shrink: 0;
+      border: 1.5px solid;
+      background: var(--background);
     }
 
-    .step-number.done { background: rgba(22, 163, 74, 0.15); color: #4ade80; }
-    .step-number.active { background: rgba(217, 119, 6, 0.15); color: #fbbf24; }
-    .step-number.wait { background: var(--muted); color: var(--muted-foreground); }
+    .tl-dot.done  { border-color: #16a34a; background: #16a34a; }
+    .tl-dot.active { border-color: #d97706; background: var(--background); }
+    .tl-dot.wait  { border-color: var(--border-strong); background: var(--background); }
 
-    .step-label { font-size: 13px; font-weight: 600; color: var(--foreground); }
-    .step-sub { font-size: 12px; color: var(--muted-foreground); margin-top: 2px; line-height: 1.4; }
-
-    .step-badge {
-      margin-left: auto;
+    .tl-status {
       font-size: 10px;
-      font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 4px;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.3px;
-      flex-shrink: 0;
+      letter-spacing: 0.8px;
+      margin-bottom: 3px;
     }
+    .tl-status.done   { color: #4ade80; }
+    .tl-status.active { color: #fbbf24; }
+    .tl-status.wait   { color: var(--muted-foreground); }
 
-    .badge-approved { background: rgba(22, 163, 74, 0.12); color: #4ade80; }
-    .badge-pending { background: rgba(217, 119, 6, 0.12); color: #fbbf24; }
-    .badge-submitted { background: rgba(185, 28, 28, 0.12); color: #f87171; }
-    .badge-waiting { background: var(--muted); color: var(--muted-foreground); }
+    .tl-title { font-size: 13px; font-weight: 600; color: var(--foreground); margin-bottom: 2px; }
+    .tl-sub   { font-size: 12px; color: var(--muted-foreground); line-height: 1.45; }
 
     /* ── Divider ── */
     .section-divider { border: none; border-top: 1px solid var(--border); }
@@ -612,13 +602,7 @@
   <nav class="nav">
     <div class="nav-inner">
       <a class="nav-brand" href="index.html">
-        <div class="brand-mark">
-          <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        </div>
-        <div>
-          <div class="brand-name">NSSCE</div>
-          <div class="brand-sub">Palakkad &middot; KTU Affiliated</div>
-        </div>
+        <img src="logo.jpg" alt="NSS College of Engineering, Palakkad" style="height:38px;width:auto;display:block;object-fit:contain;">
       </a>
       <div class="nav-links">
         <a class="nav-link" href="#how-it-works">How it Works</a>
@@ -650,44 +634,33 @@
       </div>
 
       <div class="hero-visual">
-        <div class="hv-bar">
-          <div class="hv-bar-dot"></div>
-          <div class="hv-bar-dot"></div>
-          <div class="hv-bar-dot"></div>
-          <span class="hv-bar-title">Approval Pipeline</span>
-        </div>
+        <div class="hv-label">Approval Trail &mdash; IEEE Workshop on Embedded Systems</div>
         <div class="hv-body">
-          <div class="flow-step">
-            <div class="step-number done">1</div>
-            <div>
-              <div class="step-label">Request Submitted</div>
-              <div class="step-sub">IEEE Workshop on Embedded Systems &bull; ECE Seminar Hall</div>
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-dot done"></div>
+              <div class="tl-status done">Submitted</div>
+              <div class="tl-title">Request submitted by Club Head</div>
+              <div class="tl-sub">ECE Seminar Hall &middot; 16 Sep, 09:00&ndash;17:00</div>
             </div>
-            <span class="step-badge badge-submitted">Submitted</span>
-          </div>
-          <div class="flow-step">
-            <div class="step-number done">2</div>
-            <div>
-              <div class="step-label">HOD Reviewed</div>
-              <div class="step-sub">HOD &ndash; Electronics &amp; Communication</div>
+            <div class="tl-item">
+              <div class="tl-dot done"></div>
+              <div class="tl-status done">HOD Approved</div>
+              <div class="tl-title">HOD &ndash; Electronics &amp; Communication</div>
+              <div class="tl-sub">&ldquo;Well-organised proposal. Approved.&rdquo;</div>
             </div>
-            <span class="step-badge badge-approved">Approved</span>
-          </div>
-          <div class="flow-step">
-            <div class="step-number active">3</div>
-            <div>
-              <div class="step-label">Principal Review</div>
-              <div class="step-sub">Awaiting final decision</div>
+            <div class="tl-item">
+              <div class="tl-dot active"></div>
+              <div class="tl-status active">Pending</div>
+              <div class="tl-title">Awaiting Principal&rsquo;s decision</div>
+              <div class="tl-sub">Final approval required to publish</div>
             </div>
-            <span class="step-badge badge-pending">Pending</span>
-          </div>
-          <div class="flow-step">
-            <div class="step-number wait">4</div>
-            <div>
-              <div class="step-label">Event Published</div>
-              <div class="step-sub">Visible on campus calendar</div>
+            <div class="tl-item">
+              <div class="tl-dot wait"></div>
+              <div class="tl-status wait">Not yet</div>
+              <div class="tl-title">Event published to calendar</div>
+              <div class="tl-sub">Open for student registration</div>
             </div>
-            <span class="step-badge badge-waiting">Waiting</span>
           </div>
         </div>
       </div>

@@ -150,30 +150,6 @@
       align-items: center;
     }
 
-    .hero-kicker {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--muted-foreground);
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      background: var(--secondary);
-      padding: 5px 12px;
-      border-radius: 4px;
-      border: 1px solid var(--border-strong);
-      margin-bottom: 20px;
-    }
-
-    .hero-kicker-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--primary);
-      flex-shrink: 0;
-    }
-
     .hero h1 {
       font-family: 'Poppins', sans-serif;
       font-size: 48px;
@@ -602,7 +578,7 @@
   <nav class="nav">
     <div class="nav-inner">
       <a class="nav-brand" href="index.html">
-        <img src="logo.jpg" alt="NSS College of Engineering, Palakkad" style="height:38px;width:auto;display:block;object-fit:contain;">
+        <img src="logo.jpg" alt="NSS College of Engineering, Palakkad" style="height:44px;width:auto;display:block;object-fit:contain;">
       </a>
       <div class="nav-links">
         <a class="nav-link" href="#how-it-works">How it Works</a>
@@ -617,10 +593,6 @@
   <section>
     <div class="hero">
       <div class="hero-content">
-        <div class="hero-kicker">
-          <div class="hero-kicker-dot"></div>
-          NSS College of Engineering, Palakkad
-        </div>
         <h1>Campus Event &amp; <span>Venue Booking</span> System</h1>
         <p class="hero-desc">
           A structured, role-based system for submitting venue requests, tracking approvals, and publishing campus events &mdash; replacing paper-based processes entirely.
@@ -634,32 +606,32 @@
       </div>
 
       <div class="hero-visual">
-        <div class="hv-label">Approval Trail &mdash; IEEE Workshop on Embedded Systems</div>
+        <div class="hv-label">How a request moves through approval</div>
         <div class="hv-body">
           <div class="timeline">
             <div class="tl-item">
               <div class="tl-dot done"></div>
               <div class="tl-status done">Submitted</div>
-              <div class="tl-title">Request submitted by Club Head</div>
-              <div class="tl-sub">ECE Seminar Hall &middot; 16 Sep, 09:00&ndash;17:00</div>
+              <div class="tl-title">Club Head submits venue request</div>
+              <div class="tl-sub">Venue, dates, event details and KTU segment selected</div>
             </div>
             <div class="tl-item">
               <div class="tl-dot done"></div>
               <div class="tl-status done">HOD Approved</div>
-              <div class="tl-title">HOD &ndash; Electronics &amp; Communication</div>
-              <div class="tl-sub">&ldquo;Well-organised proposal. Approved.&rdquo;</div>
+              <div class="tl-title">Department HOD reviews and remarks</div>
+              <div class="tl-sub">Remark is mandatory &mdash; then forwarded to Principal</div>
             </div>
             <div class="tl-item">
               <div class="tl-dot active"></div>
-              <div class="tl-status active">Pending</div>
-              <div class="tl-title">Awaiting Principal&rsquo;s decision</div>
-              <div class="tl-sub">Final approval required to publish</div>
+              <div class="tl-status active">Pending Principal</div>
+              <div class="tl-title">Principal gives final decision</div>
+              <div class="tl-sub">With a mandatory remark for approval or rejection</div>
             </div>
             <div class="tl-item">
               <div class="tl-dot wait"></div>
-              <div class="tl-status wait">Not yet</div>
-              <div class="tl-title">Event published to calendar</div>
-              <div class="tl-sub">Open for student registration</div>
+              <div class="tl-status wait">Published</div>
+              <div class="tl-title">Event goes live on the calendar</div>
+              <div class="tl-sub">Students can register and earn KTU activity points</div>
             </div>
           </div>
         </div>

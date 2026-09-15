@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="NSSCE Event Management and Venue Booking System — NSS College of Engineering, Palakkad. Submit, track, and manage campus event requests with role-based approvals.">
+  <meta name="description"
+    content="NSSCE Event Management and Venue Booking System — NSS College of Engineering, Palakkad. Submit, track, and manage campus event requests with role-based approvals.">
   <title>NSSCE Event Management System — NSS College of Engineering, Palakkad</title>
   <link rel="icon" type="image/jpeg" href="favicon.jpg">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
+    rel="stylesheet">
   <style>
     :root {
       --background: #09090b;
@@ -31,8 +35,18 @@
       --text-secondary: #a1a1aa;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       font-family: 'Inter', sans-serif;
       background: var(--background);
@@ -137,7 +151,9 @@
       transition: background 0.15s;
     }
 
-    .nav-cta:hover { background: var(--primary-dark); }
+    .nav-cta:hover {
+      background: var(--primary-dark);
+    }
 
     /* ── Hero ── */
     .hero {
@@ -160,7 +176,9 @@
       letter-spacing: -0.5px;
     }
 
-    .hero h1 span { color: var(--primary); }
+    .hero h1 span {
+      color: var(--primary);
+    }
 
     .hero-desc {
       font-size: 16px;
@@ -192,9 +210,12 @@
       font-family: 'Inter', sans-serif;
     }
 
-    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
 
-    .btn-primary svg, .btn-secondary svg {
+    .btn-primary svg,
+    .btn-secondary svg {
       width: 16px;
       height: 16px;
       stroke: currentColor;
@@ -223,10 +244,16 @@
       border-bottom: 1px solid var(--border);
     }
 
-    .hv-body { padding: 22px; }
+    .hv-body {
+      padding: 22px;
+    }
 
     /* Vertical timeline */
-    .timeline { position: relative; padding-left: 16px; }
+    .timeline {
+      position: relative;
+      padding-left: 16px;
+    }
+
     .timeline::before {
       content: '';
       position: absolute;
@@ -241,7 +268,10 @@
       position: relative;
       padding: 0 0 26px 20px;
     }
-    .tl-item:last-child { padding-bottom: 0; }
+
+    .tl-item:last-child {
+      padding-bottom: 0;
+    }
 
     .tl-dot {
       position: absolute;
@@ -254,9 +284,20 @@
       background: var(--background);
     }
 
-    .tl-dot.done  { border-color: #16a34a; background: #16a34a; }
-    .tl-dot.active { border-color: #d97706; background: var(--background); }
-    .tl-dot.wait  { border-color: var(--border-strong); background: var(--background); }
+    .tl-dot.done {
+      border-color: #16a34a;
+      background: #16a34a;
+    }
+
+    .tl-dot.active {
+      border-color: #d97706;
+      background: var(--background);
+    }
+
+    .tl-dot.wait {
+      border-color: var(--border-strong);
+      background: var(--background);
+    }
 
     .tl-status {
       font-size: 10px;
@@ -265,15 +306,37 @@
       letter-spacing: 0.8px;
       margin-bottom: 3px;
     }
-    .tl-status.done   { color: #4ade80; }
-    .tl-status.active { color: #fbbf24; }
-    .tl-status.wait   { color: var(--muted-foreground); }
 
-    .tl-title { font-size: 13px; font-weight: 600; color: var(--foreground); margin-bottom: 2px; }
-    .tl-sub   { font-size: 12px; color: var(--muted-foreground); line-height: 1.45; }
+    .tl-status.done {
+      color: #4ade80;
+    }
+
+    .tl-status.active {
+      color: #fbbf24;
+    }
+
+    .tl-status.wait {
+      color: var(--muted-foreground);
+    }
+
+    .tl-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--foreground);
+      margin-bottom: 2px;
+    }
+
+    .tl-sub {
+      font-size: 12px;
+      color: var(--muted-foreground);
+      line-height: 1.45;
+    }
 
     /* ── Divider ── */
-    .section-divider { border: none; border-top: 1px solid var(--border); }
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+    }
 
     /* ── Sections ── */
     .section {
@@ -320,8 +383,14 @@
       border-right: 1px solid var(--border);
     }
 
-    .step-card:last-child { border-right: none; padding-right: 0; }
-    .step-card + .step-card { padding-left: 28px; }
+    .step-card:last-child {
+      border-right: none;
+      padding-right: 0;
+    }
+
+    .step-card+.step-card {
+      padding-left: 28px;
+    }
 
     .step-num {
       font-family: 'Poppins', sans-serif;
@@ -354,8 +423,18 @@
       stroke-linejoin: round;
     }
 
-    .step-title { font-size: 14px; font-weight: 700; margin-bottom: 8px; color: var(--foreground); }
-    .step-text { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
+    .step-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--foreground);
+    }
+
+    .step-text {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
 
     /* ── Roles ── */
     .roles-grid {
@@ -373,7 +452,9 @@
       transition: border-color 0.2s;
     }
 
-    .role-card:hover { border-color: var(--border-strong); }
+    .role-card:hover {
+      border-color: var(--border-strong);
+    }
 
     .role-icon {
       width: 34px;
@@ -395,14 +476,43 @@
       stroke-linejoin: round;
     }
 
-    .role-icon.maroon { background: rgba(185, 28, 28, 0.12); color: #f87171; }
-    .role-icon.green { background: rgba(22, 163, 74, 0.12); color: #4ade80; }
-    .role-icon.amber { background: rgba(217, 119, 6, 0.12); color: #fbbf24; }
-    .role-icon.blue { background: rgba(59, 130, 246, 0.12); color: #60a5fa; }
-    .role-icon.slate { background: rgba(100, 116, 139, 0.12); color: #94a3b8; }
+    .role-icon.maroon {
+      background: rgba(185, 28, 28, 0.12);
+      color: #f87171;
+    }
 
-    .role-name { font-size: 13px; font-weight: 700; margin-bottom: 5px; color: var(--foreground); }
-    .role-desc { font-size: 12px; color: var(--muted-foreground); line-height: 1.55; }
+    .role-icon.green {
+      background: rgba(22, 163, 74, 0.12);
+      color: #4ade80;
+    }
+
+    .role-icon.amber {
+      background: rgba(217, 119, 6, 0.12);
+      color: #fbbf24;
+    }
+
+    .role-icon.blue {
+      background: rgba(59, 130, 246, 0.12);
+      color: #60a5fa;
+    }
+
+    .role-icon.slate {
+      background: rgba(100, 116, 139, 0.12);
+      color: #94a3b8;
+    }
+
+    .role-name {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 5px;
+      color: var(--foreground);
+    }
+
+    .role-desc {
+      font-size: 12px;
+      color: var(--muted-foreground);
+      line-height: 1.55;
+    }
 
     /* ── Venues ── */
     .venues-strip {
@@ -433,10 +543,24 @@
       margin-bottom: 10px;
     }
 
-    .venue-name { font-size: 14px; font-weight: 700; margin-bottom: 5px; color: var(--foreground); }
-    .venue-cap { font-size: 12px; color: var(--muted-foreground); margin-bottom: 12px; }
+    .venue-name {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 5px;
+      color: var(--foreground);
+    }
 
-    .venue-feats { display: flex; flex-wrap: wrap; gap: 5px; }
+    .venue-cap {
+      font-size: 12px;
+      color: var(--muted-foreground);
+      margin-bottom: 12px;
+    }
+
+    .venue-feats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
 
     .venue-feat {
       font-size: 11px;
@@ -463,10 +587,15 @@
       font-family: 'Inter', sans-serif;
     }
 
-    .btn-secondary:hover { border-color: var(--muted-foreground); background: var(--border-strong); }
+    .btn-secondary:hover {
+      border-color: var(--muted-foreground);
+      background: var(--border-strong);
+    }
 
     /* ── CTA ── */
-    .cta-banner { background: var(--primary); }
+    .cta-banner {
+      background: var(--primary);
+    }
 
     .cta-inner {
       max-width: 1200px;
@@ -488,7 +617,7 @@
 
     .cta-desc {
       font-size: 15px;
-      color: rgba(255,255,255,0.65);
+      color: rgba(255, 255, 255, 0.65);
       max-width: 480px;
       line-height: 1.65;
     }
@@ -510,7 +639,9 @@
       font-family: 'Inter', sans-serif;
     }
 
-    .cta-action:hover { background: #e0c070; }
+    .cta-action:hover {
+      background: #e0c070;
+    }
 
     .cta-action svg {
       width: 15px;
@@ -523,7 +654,10 @@
     }
 
     /* ── Footer ── */
-    .footer { border-top: 1px solid var(--border); background: var(--surface); }
+    .footer {
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+    }
 
     .footer-inner {
       max-width: 1200px;
@@ -536,10 +670,21 @@
       flex-wrap: wrap;
     }
 
-    .footer-brand { font-size: 13px; color: var(--muted-foreground); }
-    .footer-brand strong { color: var(--text-secondary); font-weight: 600; }
+    .footer-brand {
+      font-size: 13px;
+      color: var(--muted-foreground);
+    }
 
-    .footer-links { display: flex; align-items: center; gap: 20px; }
+    .footer-brand strong {
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
 
     .footer-link {
       font-size: 13px;
@@ -548,37 +693,91 @@
       transition: color 0.15s;
     }
 
-    .footer-link:hover { color: var(--foreground); }
+    .footer-link:hover {
+      color: var(--foreground);
+    }
 
     /* ── Responsive ── */
     @media (max-width: 960px) {
-      .hero { grid-template-columns: 1fr; gap: 40px; padding: 56px 20px; }
-      .hero h1 { font-size: 36px; }
-      .steps-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
-      .step-card { border-right: none; padding: 0 0 28px 0; border-bottom: 1px solid var(--border); }
-      .step-card:last-child { border-bottom: none; padding-bottom: 0; }
-      .step-card + .step-card { padding-left: 0; }
-      .roles-grid { grid-template-columns: 1fr 1fr; }
-      .venues-strip { grid-template-columns: 1fr 1fr; }
-      .cta-inner { flex-direction: column; align-items: flex-start; }
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding: 56px 20px;
+      }
+
+      .hero h1 {
+        font-size: 36px;
+      }
+
+      .steps-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 28px;
+      }
+
+      .step-card {
+        border-right: none;
+        padding: 0 0 28px 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .step-card:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+
+      .step-card+.step-card {
+        padding-left: 0;
+      }
+
+      .roles-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .venues-strip {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .cta-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
 
     @media (max-width: 600px) {
-      .nav-link { display: none; }
-      .steps-grid { grid-template-columns: 1fr; }
-      .roles-grid { grid-template-columns: 1fr 1fr; }
-      .venues-strip { grid-template-columns: 1fr; }
-      .hero h1 { font-size: 30px; }
-      .hero-visual { display: none; }
+      .nav-link {
+        display: none;
+      }
+
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .roles-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .venues-strip {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        font-size: 30px;
+      }
+
+      .hero-visual {
+        display: none;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <nav class="nav">
     <div class="nav-inner">
       <a class="nav-brand" href="index.html">
-        <img src="logo.jpg" alt="NSS College of Engineering, Palakkad" style="height:44px;width:auto;display:block;object-fit:contain;">
+        <img src="logo.jpg" alt="NSS College of Engineering, Palakkad"
+          style="height:44px;width:auto;display:block;object-fit:contain;">
       </a>
       <div class="nav-links">
         <a class="nav-link" href="#how-it-works">How it Works</a>
@@ -595,18 +794,22 @@
       <div class="hero-content">
         <h1>Campus Event &amp; <span>Venue Booking</span> System</h1>
         <p class="hero-desc">
-          A structured, role-based system for submitting venue requests, tracking approvals, and publishing campus events &mdash; replacing paper-based processes entirely.
+          A structured, role-based system for submitting venue requests, tracking approvals, and publishing campus
+          events &mdash; replacing paper-based processes entirely.
         </p>
         <div class="hero-actions">
           <a class="btn-primary" href="campus-map.html">
-            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <svg viewBox="0 0 24 24">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
             Open Venue Map
           </a>
         </div>
       </div>
 
       <div class="hero-visual">
-        <div class="hv-label">How a request moves through approval</div>
+        <div class="hv-label">Approval workflow</div>
         <div class="hv-body">
           <div class="timeline">
             <div class="tl-item">
@@ -645,40 +848,60 @@
   <section class="section" id="how-it-works">
     <div class="section-kicker">Process</div>
     <h2 class="section-title">How venue booking works</h2>
-    <p class="section-desc">Every event request follows a defined two-level approval path to ensure fairness, conflict prevention, and institutional accountability.</p>
+    <p class="section-desc">Every event request follows a defined two-level approval path to ensure fairness, conflict
+      prevention, and institutional accountability.</p>
 
     <div class="steps-grid">
       <div class="step-card">
         <div class="step-num">01</div>
         <div class="step-icon-wrap">
-          <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <svg viewBox="0 0 24 24">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+            <circle cx="12" cy="10" r="3" />
+          </svg>
         </div>
         <div class="step-title">Select Venue on Map</div>
-        <p class="step-text">Choose a date range, then click any venue on the interactive campus map. Green means available, amber means pending, red means booked.</p>
+        <p class="step-text">Choose a date range, then click any venue on the interactive campus map. Green means
+          available, amber means pending, red means booked.</p>
       </div>
       <div class="step-card">
         <div class="step-num">02</div>
         <div class="step-icon-wrap">
-          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          <svg viewBox="0 0 24 24">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="16" y1="13" x2="8" y2="13" />
+            <line x1="16" y1="17" x2="8" y2="17" />
+          </svg>
         </div>
         <div class="step-title">Submit Event Request</div>
-        <p class="step-text">Club Heads fill in event details &mdash; title, description, club, category, expected attendance, and KTU activity point segment if applicable.</p>
+        <p class="step-text">Club Heads fill in event details &mdash; title, description, club, category, expected
+          attendance, and KTU activity point segment if applicable.</p>
       </div>
       <div class="step-card">
         <div class="step-num">03</div>
         <div class="step-icon-wrap">
-          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <svg viewBox="0 0 24 24">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+          </svg>
         </div>
         <div class="step-title">HOD Reviews Request</div>
-        <p class="step-text">The HOD of the department that owns the venue reviews the request. A written remark is mandatory for all decisions. Approved requests proceed to the Principal.</p>
+        <p class="step-text">The HOD of the department that owns the venue reviews the request. A written remark is
+          mandatory for all decisions. Approved requests proceed to the Principal.</p>
       </div>
       <div class="step-card">
         <div class="step-num">04</div>
         <div class="step-icon-wrap">
-          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          <svg viewBox="0 0 24 24">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
         </div>
         <div class="step-title">Principal Final Approval</div>
-        <p class="step-text">The Principal provides the final decision with a mandatory remark. Once approved, the event is published and the venue is marked booked for that slot.</p>
+        <p class="step-text">The Principal provides the final decision with a mandatory remark. Once approved, the event
+          is published and the venue is marked booked for that slot.</p>
       </div>
     </div>
   </section>
@@ -689,40 +912,62 @@
   <section class="section" id="roles">
     <div class="section-kicker">Access Control</div>
     <h2 class="section-title">Role-based access</h2>
-    <p class="section-desc">Each user has a defined role that determines what they can see and do. A user can hold multiple roles simultaneously.</p>
+    <p class="section-desc">Each user has a defined role that determines what they can see and do. A user can hold
+      multiple roles simultaneously.</p>
 
     <div class="roles-grid">
       <div class="role-card">
         <div class="role-icon slate">
-          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+          <svg viewBox="0 0 24 24">
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <line x1="3" y1="9" x2="21" y2="9" />
+            <line x1="3" y1="15" x2="21" y2="15" />
+            <line x1="9" y1="3" x2="9" y2="21" />
+          </svg>
         </div>
         <div class="role-name">Admin</div>
         <div class="role-desc">Manages users, roles, departments, and venue records across the entire system.</div>
       </div>
       <div class="role-card">
         <div class="role-icon blue">
-          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <svg viewBox="0 0 24 24">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
         </div>
         <div class="role-name">Principal</div>
         <div class="role-desc">Views all events. Provides final approval or rejection with a mandatory remark.</div>
       </div>
       <div class="role-card">
         <div class="role-icon amber">
-          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <svg viewBox="0 0 24 24">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+          </svg>
         </div>
         <div class="role-name">HOD</div>
-        <div class="role-desc">Reviews venue requests for their department only. Approves or rejects with a mandatory remark.</div>
+        <div class="role-desc">Reviews venue requests for their department only. Approves or rejects with a mandatory
+          remark.</div>
       </div>
       <div class="role-card">
         <div class="role-icon maroon">
-          <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <svg viewBox="0 0 24 24">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+            <circle cx="12" cy="10" r="3" />
+          </svg>
         </div>
         <div class="role-name">Club Head</div>
-        <div class="role-desc">Creates events, selects venues on the map, tracks approval status, and marks attendance.</div>
+        <div class="role-desc">Creates events, selects venues on the map, tracks approval status, and marks attendance.
+        </div>
       </div>
       <div class="role-card">
         <div class="role-icon green">
-          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <svg viewBox="0 0 24 24">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
         </div>
         <div class="role-name">Student</div>
         <div class="role-desc">Browses approved events, registers, and downloads participation certificates.</div>
@@ -736,7 +981,8 @@
   <section class="section" id="venues">
     <div class="section-kicker">Campus Venues</div>
     <h2 class="section-title">23 venues across 7 departments</h2>
-    <p class="section-desc">From the 800-seat Auditorium to department seminar halls and computer labs &mdash; all managed with conflict detection and real-time availability.</p>
+    <p class="section-desc">From the 800-seat Auditorium to department seminar halls and computer labs &mdash; all
+      managed with conflict detection and real-time availability.</p>
 
     <div class="venues-strip">
       <div class="venue-card">
@@ -809,7 +1055,11 @@
 
     <div style="margin-top: 28px;">
       <a class="btn-secondary" href="campus-map.html">
-        <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <svg viewBox="0 0 24 24"
+          style="width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+          <circle cx="12" cy="10" r="3" />
+        </svg>
         View all venues on the interactive map
       </a>
     </div>
@@ -820,11 +1070,15 @@
     <div class="cta-inner">
       <div>
         <div class="cta-title">Ready to book a venue?</div>
-        <p class="cta-desc">Open the interactive campus map, select your date and time, then click any venue to check availability and submit a request.</p>
+        <p class="cta-desc">Open the interactive campus map, select your date and time, then click any venue to check
+          availability and submit a request.</p>
       </div>
       <a class="cta-action" href="campus-map.html">
         Open Booking System
-        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        <svg viewBox="0 0 24 24">
+          <line x1="5" y1="12" x2="19" y2="12" />
+          <polyline points="12 5 19 12 12 19" />
+        </svg>
       </a>
     </div>
   </div>
@@ -833,7 +1087,8 @@
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-brand">
-        <strong>NSS College of Engineering</strong> &bull; Akathethara, Palakkad, Kerala &bull; APJ Abdul Kalam Technological University
+        <strong>NSS College of Engineering</strong> &bull; Akathethara, Palakkad, Kerala &bull; APJ Abdul Kalam
+        Technological University
       </div>
       <div class="footer-links">
         <a class="footer-link" href="privacy.html">Privacy Policy</a>
@@ -843,4 +1098,5 @@
   </footer>
 
 </body>
+
 </html>

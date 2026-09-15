@@ -3,189 +3,284 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NSSCE Campus Venue Booking — Interactive Map</title>
+<title>NSSCE Campus Venue Booking &mdash; Interactive Map</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --primary:#7B1C1C; --primary-dark:#5a1414; --primary-light:#9b3030;
-  --accent:#C9A84C; --accent-light:#e0c070;
-  --bg:#FAF8F5; --surface:#fff; --text:#1A1A1A; --muted:#6B7280; --border:#E5E7EB;
-  --avail:#16A34A; --avail-bg:#DCFCE7;
-  --pend:#D97706;  --pend-bg:#FEF9C3;
-  --booked:#DC2626; --booked-bg:#FEE2E2;
-  --neu:#9CA3AF;   --neu-bg:#F3F4F6;
-  --hdr:64px; --sb:300px; --panel:390px;
-  --r:12px; --r-sm:8px;
-  --shadow:0 4px 24px rgba(0,0,0,.12); --shadow-lg:0 8px 48px rgba(0,0,0,.2);
+  --background: #09090b;
+  --foreground: #fafafa;
+  --card: #09090b;
+  --surface: #18181b;
+  --surface-2: #27272a;
+  --primary: #b91c1c;
+  --primary-dark: #991b1b;
+  --primary-foreground: #fafafa;
+  --secondary: #27272a;
+  --muted: #27272a;
+  --muted-foreground: #71717a;
+  --accent: #C9A84C;
+  --accent-light: #e0c070;
+  --border: #27272a;
+  --border-strong: #3f3f46;
+  --ring: #b91c1c;
+  --radius: 8px;
+
+  --avail: #16a34a; --avail-bg: rgba(22,163,74,0.12);
+  --pend: #d97706;  --pend-bg: rgba(217,119,6,0.12);
+  --booked: #dc2626; --booked-bg: rgba(220,38,38,0.12);
+  --neu: #52525b; --neu-bg: rgba(63,63,70,0.5);
+
+  --hdr: 64px; --sb: 296px; --panel: 390px;
 }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow:hidden}
-.hdr{height:var(--hdr);background:var(--primary);display:flex;align-items:center;padding:0 20px;gap:14px;position:fixed;top:0;left:0;right:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,.35)}
-.logo-main{font-family:'Poppins',sans-serif;font-size:18px;font-weight:800;color:#fff;line-height:1}
-.logo-sub{font-size:10px;color:var(--accent-light);letter-spacing:.8px;text-transform:uppercase}
-.hdiv{width:1px;height:36px;background:rgba(255,255,255,.2)}
-.hdr-title{flex:1;color:rgba(255,255,255,.8);font-size:13px;font-weight:500}
-.rlbl{font-size:11px;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
-.rsel{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:8px;color:#fff;padding:6px 30px 6px 11px;font-size:13px;font-family:'Inter',sans-serif;font-weight:500;cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center}
-.rsel:focus{outline:none;border-color:var(--accent)}.rsel option{background:var(--primary)}
-.notif-btn{position:relative;background:rgba(255,255,255,.1);border:none;border-radius:10px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:18px;transition:background .2s;flex-shrink:0}
-.notif-btn:hover{background:rgba(255,255,255,.2)}
-.nbadge{position:absolute;top:4px;right:4px;background:var(--accent);color:var(--primary);font-size:10px;font-weight:700;border-radius:99px;min-width:16px;height:16px;display:none;align-items:center;justify-content:center;padding:0 3px}
-.nbadge.show{display:flex}
-.pipe-btn{background:var(--accent);color:var(--primary);border:none;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .2s;white-space:nowrap}
-.pipe-btn:hover{background:var(--accent-light);transform:translateY(-1px)}
-.layout{display:flex;height:100vh;padding-top:var(--hdr)}
-.sb{width:var(--sb);flex-shrink:0;height:100%;overflow-y:auto;background:var(--surface);border-right:1px solid var(--border);padding:16px;display:flex;flex-direction:column;gap:14px}
-.sb::-webkit-scrollbar{width:3px}.sb::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
-.sb-sec{background:var(--bg);border-radius:var(--r-sm);padding:14px}
-.sb-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--primary);margin-bottom:12px}
-.fl{margin-bottom:10px}
-.fl label{display:block;font-size:11px;font-weight:600;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px}
-.finp{width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:'Inter',sans-serif;color:var(--text);background:#fff;transition:border-color .2s}
-.finp:focus{outline:none;border-color:var(--primary)}
-.btn-chk{width:100%;background:var(--primary);color:#fff;border:none;border-radius:8px;padding:11px;font-size:14px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;margin-top:2px}
-.btn-chk:hover{background:var(--primary-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(123,28,28,.3)}
-.leg-item{display:flex;align-items:center;gap:9px;font-size:12px;margin-bottom:8px}
-.leg-dot{width:14px;height:14px;border-radius:3px;flex-shrink:0}
-.act-sec{background:linear-gradient(135deg,var(--primary) 0%,#9b3030 100%);border-radius:var(--r-sm);padding:14px;color:#fff}
-.act-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:rgba(255,255,255,.65);margin-bottom:6px}
-.act-p{font-size:12px;color:rgba(255,255,255,.85);margin-bottom:10px;line-height:1.5}
-.pcount{display:inline-flex;align-items:center;justify-content:center;background:var(--accent);color:var(--primary);border-radius:99px;font-size:11px;font-weight:700;min-width:20px;height:20px;padding:0 5px;margin-left:6px}
-.btn-act{width:100%;background:var(--accent);color:var(--primary);border:none;border-radius:8px;padding:10px;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s}
-.btn-act:hover{background:var(--accent-light)}
-.btn-rst{width:100%;background:transparent;color:var(--muted);border:1px dashed var(--border);border-radius:8px;padding:8px;font-size:12px;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;margin-top:6px}
-.btn-rst:hover{border-color:var(--muted);color:var(--text)}
-.map-area{flex:1;height:100%;overflow:auto;background:#E8E2D8;position:relative}
-.map-area::-webkit-scrollbar{width:6px;height:6px}.map-area::-webkit-scrollbar-thumb{background:rgba(0,0,0,.2);border-radius:3px}
-.map-wrap{min-height:100%;display:flex;align-items:center;justify-content:center;padding:20px}
-.campus-svg{width:100%;max-width:980px;height:auto;filter:drop-shadow(0 8px 32px rgba(0,0,0,.18))}
-.venue-group{cursor:pointer}
-.venue-group:hover rect.vr{filter:brightness(.88)}
-rect.vr{transition:all .3s ease}
-.map-guide{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);background:rgba(26,26,26,.78);color:#fff;padding:8px 18px;border-radius:99px;font-size:12px;backdrop-filter:blur(8px);pointer-events:none;white-space:nowrap}
-.tt{position:fixed;background:rgba(20,20,20,.94);color:#fff;padding:10px 14px;border-radius:9px;font-size:13px;pointer-events:none;z-index:500;box-shadow:var(--shadow);backdrop-filter:blur(8px);max-width:230px;display:none;border:1px solid rgba(201,168,76,.3)}
-.tt-name{font-weight:700;font-size:13px;margin-bottom:3px}
-.tt-dept{font-size:11px;color:rgba(255,255,255,.55);margin-bottom:5px}
-.tt-cap{font-size:12px;color:var(--accent)}
-.tt-st{font-size:11px;margin-top:4px}
-.vpanel{position:fixed;top:var(--hdr);right:0;width:var(--panel);height:calc(100vh - var(--hdr));background:var(--surface);box-shadow:-8px 0 32px rgba(0,0,0,.15);z-index:200;transform:translateX(100%);transition:transform .35s cubic-bezier(.34,1.56,.64,1);display:flex;flex-direction:column;overflow:hidden}
-.vpanel.open{transform:translateX(0)}
-.vph{background:linear-gradient(135deg,var(--primary) 0%,#9b3030 100%);padding:20px;color:#fff;position:relative;flex-shrink:0}
-.vpc{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.15);border:none;border-radius:6px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:13px;transition:background .2s}
-.vpc:hover{background:rgba(255,255,255,.28)}
-.vpn{font-family:'Poppins',sans-serif;font-size:17px;font-weight:700;margin-bottom:3px;padding-right:40px}
-.vpd{font-size:11px;color:rgba(255,255,255,.6)}
-.vp-chip{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:600;margin-top:9px}
-.chip-def{background:rgba(255,255,255,.1);color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.2)}
-.chip-avail{background:rgba(22,163,74,.15);color:#4ade80;border:1px solid rgba(22,163,74,.3)}
-.chip-pend{background:rgba(217,119,6,.15);color:#fbbf24;border:1px solid rgba(217,119,6,.3)}
-.chip-book{background:rgba(220,38,38,.15);color:#f87171;border:1px solid rgba(220,38,38,.3)}
-.vpbody{flex:1;overflow-y:auto;padding:18px}
-.vpbody::-webkit-scrollbar{width:3px}.vpbody::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
-.vps{margin-bottom:18px}
-.vps-t{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:8px}
-.cap-big{font-family:'Poppins',sans-serif;font-size:28px;font-weight:700;color:var(--primary);display:flex;align-items:center;gap:8px}
-.cap-lbl{font-family:'Inter',sans-serif;font-size:13px;font-weight:400;color:var(--muted)}
-.feat-grid{display:flex;flex-wrap:wrap;gap:5px}
-.feat-chip{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:4px 9px;font-size:12px;display:flex;align-items:center;gap:4px}
-.route-box{background:#FFF8E7;border:1px solid #F0D090;border-radius:8px;padding:12px;font-size:13px}
-.route-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
-.route-val{font-weight:700;color:var(--primary)}
-.bk-item{background:var(--bg);border-radius:8px;padding:10px 12px;font-size:12px;border-left:3px solid;margin-bottom:7px}
-.bk-item.bk-appr{border-color:var(--avail)}.bk-item.bk-pend{border-color:var(--pend)}
-.bk-title{font-weight:600;margin-bottom:2px}.bk-time{color:var(--muted);font-size:11px}
-.bk-badge{display:inline-block;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;margin-top:3px}
-.bk-badge.appr{background:var(--avail-bg);color:var(--avail)}.bk-badge.pend{background:var(--pend-bg);color:var(--pend)}
-.vpfoot{padding:14px 18px;border-top:1px solid var(--border);background:#fff;flex-shrink:0}
-.btn-book{width:100%;background:linear-gradient(135deg,var(--primary) 0%,#9b3030 100%);color:#fff;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px rgba(123,28,28,.3)}
-.btn-book:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(123,28,28,.4)}
-.btn-book:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
-.book-hint{font-size:11px;color:var(--muted);text-align:center;margin-top:6px;min-height:16px}
-.moverlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:300;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .25s}
-.moverlay.open{opacity:1;pointer-events:all}
-.modal{background:var(--surface);border-radius:16px;box-shadow:var(--shadow-lg);width:90%;max-width:600px;max-height:90vh;display:flex;flex-direction:column;transform:scale(.95);transition:transform .25s cubic-bezier(.34,1.56,.64,1);overflow:hidden}
-.moverlay.open .modal{transform:scale(1)}
-.mhdr{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:linear-gradient(135deg,var(--primary) 0%,#9b3030 100%);color:#fff}
-.mtitle{font-family:'Poppins',sans-serif;font-size:16px;font-weight:700}
-.msubt{font-size:11px;color:rgba(255,255,255,.6);margin-top:2px}
-.mcls{background:rgba(255,255,255,.15);border:none;border-radius:6px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:16px;transition:background .2s;flex-shrink:0}
-.mcls:hover{background:rgba(255,255,255,.28)}
-.mbody{flex:1;overflow-y:auto;padding:22px}
-.mbody::-webkit-scrollbar{width:3px}.mbody::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
-.mfoot{padding:14px 22px;border-top:1px solid var(--border);display:flex;gap:9px;justify-content:flex-end;flex-shrink:0}
-.btn{padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;border:none;transition:all .2s;display:flex;align-items:center;gap:6px}
-.btn-pri{background:var(--primary);color:#fff}.btn-pri:hover{background:var(--primary-dark)}
-.btn-gh{background:transparent;color:var(--muted);border:1.5px solid var(--border)}.btn-gh:hover{border-color:var(--muted);color:var(--text)}
-.btn-appr{background:var(--avail);color:#fff}.btn-appr:hover{background:#15803d}
-.btn-rej{background:var(--booked);color:#fff}.btn-rej:hover{background:#b91c1c}
-.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.fg{margin-bottom:14px}
-.flbl{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px}
-.finm,.fsel,.ftxt{width:100%;padding:9px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:'Inter',sans-serif;color:var(--text);background:#fff;transition:border-color .2s}
-.finm:focus,.fsel:focus,.ftxt:focus{outline:none;border-color:var(--primary)}
-.ftxt{resize:vertical;min-height:78px}
-.info-box{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:18px}
-.ib-row{display:flex;gap:16px;flex-wrap:wrap}
-.ib-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;font-weight:600}
-.ib-val{font-weight:700;color:var(--text);margin-top:2px;font-size:13px}
-.tog-grp{display:flex;gap:7px}
-.tog-btn{flex:1;padding:8px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;font-weight:500;cursor:pointer;background:#fff;color:var(--muted);text-align:center;transition:all .2s}
-.tog-btn.active{border-color:var(--primary);background:#FFF5F5;color:var(--primary);font-weight:700}
-.req-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:13px;cursor:pointer;transition:all .2s;margin-bottom:9px}
-.req-card:hover{border-color:var(--primary)}.req-card.sel{border-color:var(--primary);background:#FFF5F5}
-.rc-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px}
-.rc-title{font-weight:700;font-size:14px}
-.rc-meta{font-size:12px;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap}
-.sbadge{padding:3px 8px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
-.sbadge.phod{background:var(--pend-bg);color:#92400e}
-.sbadge.pprin{background:#E0F2FE;color:#075985}
-.sbadge.appr{background:var(--avail-bg);color:var(--avail)}
-.sbadge.rej{background:var(--booked-bg);color:var(--booked)}
-.appr-form{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:15px;margin-top:14px}
-.appr-form-title{font-size:13px;font-weight:700;margin-bottom:11px;color:var(--primary)}
-.req-mand{font-size:10px;color:var(--booked);font-weight:700}
-.divider{height:1px;background:var(--border);margin:14px 0}
-.no-items{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
-.no-icon{font-size:28px;margin-bottom:6px}
-.pipe-board{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}
-.pipe-col{background:var(--bg);border-radius:10px;padding:11px;min-height:200px}
-.pipe-col-hdr{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:9px;padding-bottom:9px;border-bottom:2px solid;display:flex;justify-content:space-between;align-items:center}
-.col-phod .pipe-col-hdr{color:#92400e;border-color:var(--pend)}
-.col-pprin .pipe-col-hdr{color:#075985;border-color:#38bdf8}
-.col-appr .pipe-col-hdr{color:#166534;border-color:var(--avail)}
-.col-rej .pipe-col-hdr{color:#991b1b;border-color:var(--booked)}
-.col-cnt{background:rgba(0,0,0,.1);border-radius:99px;padding:1px 6px;font-size:10px}
-.pipe-card{background:#fff;border-radius:8px;padding:10px;margin-bottom:7px;font-size:12px;box-shadow:0 1px 4px rgba(0,0,0,.08);cursor:pointer;transition:all .2s;border-left:3px solid}
-.pipe-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.12)}
-.col-phod .pipe-card{border-color:var(--pend)}.col-pprin .pipe-card{border-color:#38bdf8}
-.col-appr .pipe-card{border-color:var(--avail)}.col-rej .pipe-card{border-color:var(--booked)}
-.pc-title{font-weight:700;margin-bottom:3px;line-height:1.3}
-.pc-venue,.pc-date{color:var(--muted);margin-bottom:2px}
-.audit{position:relative;padding-left:22px}
-.audit::before{content:'';position:absolute;left:6px;top:0;bottom:0;width:2px;background:var(--border)}
-.a-item{position:relative;margin-bottom:14px}
-.a-item::before{content:'';position:absolute;left:-19px;top:4px;width:10px;height:10px;border-radius:50%;background:var(--primary);border:2px solid #fff;box-shadow:0 0 0 2px var(--primary)}
-.a-item.appr::before{background:var(--avail);box-shadow:0 0 0 2px var(--avail)}
-.a-item.rej::before{background:var(--booked);box-shadow:0 0 0 2px var(--booked)}
-.a-action{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
-.a-role{font-size:11px;color:var(--muted);margin-bottom:3px}
-.a-rmk{background:var(--bg);border-radius:6px;padding:7px 10px;font-size:12px;font-style:italic;border-left:2px solid var(--border)}
-.a-time{font-size:10px;color:var(--muted);margin-top:3px}
-.toast-wrap{position:fixed;bottom:22px;right:22px;z-index:1000;display:flex;flex-direction:column;gap:7px;max-width:370px}
-.toast{background:#fff;border-radius:10px;padding:12px 15px;box-shadow:0 8px 32px rgba(0,0,0,.18);display:flex;align-items:flex-start;gap:11px;border-left:4px solid;animation:slideIn .3s cubic-bezier(.34,1.56,.64,1)}
-.toast.success{border-color:var(--avail)}.toast.warning{border-color:var(--pend)}
-.toast.error{border-color:var(--booked)}.toast.info{border-color:#3b82f6}
-.toast-icon{font-size:18px;flex-shrink:0}.toast-cnt{flex:1}
-.toast-title{font-weight:700;font-size:13px;margin-bottom:2px}
-.toast-msg{font-size:12px;color:var(--muted)}
-@keyframes slideIn{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}
-@keyframes slideOut{from{transform:translateX(0);opacity:1}to{transform:translateX(120%);opacity:0}}
-.toast.out{animation:slideOut .25s ease forwards}
+
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html,body { height: 100%; font-family: 'Inter', sans-serif; background: var(--background); color: var(--foreground); overflow: hidden; -webkit-font-smoothing: antialiased; }
+
+/* Header */
+.hdr { height: var(--hdr); background: rgba(9,9,11,0.9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; align-items: center; padding: 0 20px; gap: 14px; position: fixed; top: 0; left: 0; right: 0; z-index: 100; border-bottom: 1px solid var(--border); }
+.logo-wrap { display: flex; flex-direction: column; }
+.logo-main { font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 800; color: var(--foreground); line-height: 1.1; }
+.logo-sub { font-size: 9px; color: var(--muted-foreground); letter-spacing: 0.8px; text-transform: uppercase; }
+.hdiv { width: 1px; height: 32px; background: var(--border-strong); }
+.hdr-title { flex: 1; color: var(--muted-foreground); font-size: 13px; font-weight: 500; }
+.rlbl { font-size: 11px; color: var(--muted-foreground); text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+.rsel {
+  background: var(--secondary);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  color: var(--foreground);
+  padding: 6px 30px 6px 11px;
+  font-size: 13px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 9px center;
+  transition: border-color 0.15s;
+}
+.rsel:focus { outline: none; border-color: var(--ring); }
+.rsel option { background: var(--surface); }
+
+.notif-btn { position: relative; background: var(--secondary); border: 1px solid var(--border-strong); border-radius: 6px; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--muted-foreground); transition: background 0.15s, border-color 0.15s, color 0.15s; flex-shrink: 0; }
+.notif-btn:hover { background: var(--border-strong); color: var(--foreground); border-color: var(--muted-foreground); }
+.notif-btn svg { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.nbadge { position: absolute; top: -5px; right: -5px; background: var(--primary); color: #fff; font-size: 9px; font-weight: 700; border-radius: 99px; min-width: 16px; height: 16px; display: none; align-items: center; justify-content: center; padding: 0 3px; border: 2px solid var(--background); }
+.nbadge.show { display: flex; }
+
+.pipe-btn { background: var(--secondary); color: var(--foreground); border: 1px solid var(--border-strong); border-radius: 6px; padding: 8px 14px; font-size: 13px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; display: flex; align-items: center; gap: 7px; transition: all 0.15s; white-space: nowrap; }
+.pipe-btn:hover { background: var(--border-strong); border-color: var(--muted-foreground); }
+.pipe-btn svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+.home-btn { background: transparent; color: var(--muted-foreground); border: 1px solid var(--border-strong); border-radius: 6px; padding: 7px 13px; font-size: 13px; font-weight: 500; font-family: 'Inter', sans-serif; cursor: pointer; display: flex; align-items: center; gap: 6px; text-decoration: none; transition: all 0.15s; }
+.home-btn:hover { background: var(--secondary); color: var(--foreground); }
+.home-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Layout */
+.layout { display: flex; height: 100vh; padding-top: var(--hdr); }
+.sb { width: var(--sb); flex-shrink: 0; height: 100%; overflow-y: auto; background: var(--surface); border-right: 1px solid var(--border); padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.sb::-webkit-scrollbar { width: 4px; }
+.sb::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+
+.sb-sec { background: var(--background); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; }
+.sb-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted-foreground); margin-bottom: 12px; display: flex; align-items: center; gap: 7px; }
+.sb-title svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+.fl { margin-bottom: 10px; }
+.fl label { display: block; font-size: 11px; font-weight: 600; color: var(--muted-foreground); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.4px; }
+.finp { width: 100%; padding: 8px 11px; border: 1px solid var(--border-strong); border-radius: 6px; font-size: 13px; font-family: 'Inter', sans-serif; color: var(--foreground); background: var(--secondary); transition: border-color 0.15s; }
+.finp:focus { outline: none; border-color: var(--ring); }
+
+.btn-chk { width: 100%; background: var(--primary); color: var(--primary-foreground); border: none; border-radius: 6px; padding: 10px; font-size: 13px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; transition: background 0.15s; margin-top: 4px; }
+.btn-chk:hover { background: var(--primary-dark); }
+
+.leg-item { display: flex; align-items: center; gap: 9px; font-size: 12px; margin-bottom: 8px; color: var(--muted-foreground); }
+.leg-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+
+.act-sec { background: var(--primary); border-radius: var(--radius); padding: 14px; }
+.act-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: rgba(255,255,255,0.6); margin-bottom: 5px; }
+.act-p { font-size: 12px; color: rgba(255,255,255,0.8); margin-bottom: 10px; line-height: 1.5; }
+.pcount { display: inline-flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.15); color: #fff; border-radius: 99px; font-size: 11px; font-weight: 700; min-width: 20px; height: 20px; padding: 0 5px; margin-left: 6px; }
+.btn-act { width: 100%; background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 9px; font-size: 13px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; transition: background 0.15s; }
+.btn-act:hover { background: rgba(255,255,255,0.2); }
+
+.btn-rst { width: 100%; background: transparent; color: var(--muted-foreground); border: 1px dashed var(--border-strong); border-radius: 6px; padding: 8px; font-size: 12px; font-family: 'Inter', sans-serif; cursor: pointer; transition: all 0.15s; }
+.btn-rst:hover { border-color: var(--muted-foreground); color: var(--foreground); }
+
+/* Map */
+.map-area { flex: 1; height: 100%; overflow: auto; background: #000; position: relative; }
+.map-area::-webkit-scrollbar { width: 6px; height: 6px; }
+.map-area::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+.map-wrap { min-height: 100%; display: flex; align-items: center; justify-content: center; padding: 24px; }
+.campus-svg { width: 100%; max-width: 980px; height: auto; }
+.venue-group { cursor: pointer; }
+.venue-group:hover rect.vr { filter: brightness(1.3); }
+rect.vr { transition: all 0.25s ease; }
+.map-guide { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); background: rgba(24,24,27,0.9); color: var(--muted-foreground); padding: 8px 18px; border-radius: 6px; font-size: 12px; backdrop-filter: blur(8px); pointer-events: none; white-space: nowrap; border: 1px solid var(--border); }
+
+/* Tooltip */
+.tt { position: fixed; background: rgba(24,24,27,0.97); color: var(--foreground); padding: 11px 14px; border-radius: 8px; font-size: 13px; pointer-events: none; z-index: 500; box-shadow: 0 8px 24px rgba(0,0,0,0.5); max-width: 230px; display: none; border: 1px solid var(--border-strong); }
+.tt-name { font-weight: 700; font-size: 13px; margin-bottom: 3px; }
+.tt-dept { font-size: 11px; color: var(--muted-foreground); margin-bottom: 4px; }
+.tt-cap { font-size: 12px; color: var(--accent); }
+.tt-st { font-size: 11px; margin-top: 4px; color: var(--muted-foreground); }
+
+/* Venue Panel */
+.vpanel { position: fixed; top: var(--hdr); right: 0; width: var(--panel); height: calc(100vh - var(--hdr)); background: var(--surface); border-left: 1px solid var(--border); z-index: 200; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column; overflow: hidden; box-shadow: -8px 0 32px rgba(0,0,0,0.4); }
+.vpanel.open { transform: translateX(0); }
+.vph { background: var(--primary); padding: 20px; color: #fff; position: relative; flex-shrink: 0; }
+.vpc { position: absolute; top: 14px; right: 14px; background: rgba(255,255,255,0.12); border: none; border-radius: 6px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #fff; transition: background 0.15s; }
+.vpc:hover { background: rgba(255,255,255,0.24); }
+.vpc svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.vpn { font-family: 'Poppins', sans-serif; font-size: 17px; font-weight: 700; margin-bottom: 3px; padding-right: 40px; }
+.vpd { font-size: 11px; color: rgba(255,255,255,0.6); }
+.vp-chip { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 99px; font-size: 11px; font-weight: 600; margin-top: 9px; }
+.chip-def { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.15); }
+.chip-avail { background: rgba(22,163,74,0.2); color: #4ade80; border: 1px solid rgba(22,163,74,0.3); }
+.chip-pend { background: rgba(217,119,6,0.2); color: #fbbf24; border: 1px solid rgba(217,119,6,0.3); }
+.chip-book { background: rgba(220,38,38,0.2); color: #f87171; border: 1px solid rgba(220,38,38,0.3); }
+
+.vpbody { flex: 1; overflow-y: auto; padding: 18px; }
+.vpbody::-webkit-scrollbar { width: 4px; }
+.vpbody::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+
+.vps { margin-bottom: 20px; }
+.vps-t { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted-foreground); margin-bottom: 8px; }
+.cap-big { font-family: 'Poppins', sans-serif; font-size: 28px; font-weight: 700; color: var(--foreground); display: flex; align-items: center; gap: 8px; }
+.cap-lbl { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 400; color: var(--muted-foreground); }
+.feat-grid { display: flex; flex-wrap: wrap; gap: 5px; }
+.feat-chip { background: var(--secondary); border: 1px solid var(--border-strong); border-radius: 6px; padding: 4px 9px; font-size: 12px; display: flex; align-items: center; gap: 4px; color: var(--muted-foreground); }
+.route-box { background: var(--secondary); border: 1px solid var(--border-strong); border-radius: 8px; padding: 12px; font-size: 13px; }
+.route-lbl { font-size: 10px; color: var(--muted-foreground); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; font-weight: 600; }
+.route-val { font-weight: 700; color: var(--foreground); }
+.bk-item { background: var(--secondary); border-radius: 7px; padding: 10px 12px; font-size: 12px; border-left: 3px solid; margin-bottom: 7px; }
+.bk-item.bk-appr { border-color: var(--avail); }
+.bk-item.bk-pend { border-color: var(--pend); }
+.bk-title { font-weight: 600; margin-bottom: 2px; color: var(--foreground); }
+.bk-time { color: var(--muted-foreground); font-size: 11px; }
+.bk-badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; margin-top: 3px; }
+.bk-badge.appr { background: var(--avail-bg); color: #4ade80; }
+.bk-badge.pend { background: var(--pend-bg); color: #fbbf24; }
+
+.vpfoot { padding: 14px 18px; border-top: 1px solid var(--border); background: var(--surface); flex-shrink: 0; }
+.btn-book { width: 100%; background: var(--primary); color: #fff; border: none; border-radius: 6px; padding: 12px; font-size: 14px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; transition: background 0.15s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.btn-book:hover { background: var(--primary-dark); }
+.btn-book:disabled { opacity: 0.4; cursor: not-allowed; }
+.book-hint { font-size: 11px; color: var(--muted-foreground); text-align: center; margin-top: 6px; min-height: 16px; }
+
+/* Modal */
+.moverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 300; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+.moverlay.open { opacity: 1; pointer-events: all; }
+.modal { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 16px 64px rgba(0,0,0,0.5); width: 90%; max-width: 600px; max-height: 90vh; display: flex; flex-direction: column; transform: scale(0.97); transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1); overflow: hidden; }
+.moverlay.open .modal { transform: scale(1); }
+.mhdr { padding: 18px 22px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; background: var(--primary); color: #fff; }
+.mtitle { font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 700; }
+.msubt { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+.mcls { background: rgba(255,255,255,0.12); border: none; border-radius: 6px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #fff; transition: background 0.15s; flex-shrink: 0; }
+.mcls:hover { background: rgba(255,255,255,0.24); }
+.mcls svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.mbody { flex: 1; overflow-y: auto; padding: 22px; background: var(--surface); }
+.mbody::-webkit-scrollbar { width: 4px; }
+.mbody::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+.mfoot { padding: 14px 22px; border-top: 1px solid var(--border); display: flex; gap: 9px; justify-content: flex-end; flex-shrink: 0; background: var(--surface); }
+
+.btn { padding: 9px 18px; border-radius: 6px; font-size: 13px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; border: none; transition: all 0.15s; display: flex; align-items: center; gap: 6px; }
+.btn-pri { background: var(--primary); color: #fff; }
+.btn-pri:hover { background: var(--primary-dark); }
+.btn-gh { background: transparent; color: var(--muted-foreground); border: 1px solid var(--border-strong); }
+.btn-gh:hover { border-color: var(--muted-foreground); color: var(--foreground); }
+.btn-appr { background: var(--avail); color: #fff; }
+.btn-appr:hover { background: #15803d; }
+.btn-rej { background: var(--booked); color: #fff; }
+.btn-rej:hover { background: #b91c1c; }
+
+.frow { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.fg { margin-bottom: 14px; }
+.flbl { display: block; font-size: 11px; font-weight: 700; color: var(--muted-foreground); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.4px; }
+.finm,.fsel,.ftxt { width: 100%; padding: 9px 11px; border: 1px solid var(--border-strong); border-radius: 6px; font-size: 13px; font-family: 'Inter', sans-serif; color: var(--foreground); background: var(--secondary); transition: border-color 0.15s; }
+.finm:focus,.fsel:focus,.ftxt:focus { outline: none; border-color: var(--ring); }
+.fsel option { background: var(--surface); }
+.ftxt { resize: vertical; min-height: 78px; }
+.info-box { background: var(--secondary); border: 1px solid var(--border-strong); border-radius: 8px; padding: 12px 14px; margin-bottom: 18px; }
+.ib-row { display: flex; gap: 16px; flex-wrap: wrap; }
+.ib-lbl { font-size: 10px; color: var(--muted-foreground); text-transform: uppercase; letter-spacing: 0.4px; font-weight: 600; }
+.ib-val { font-weight: 700; color: var(--foreground); margin-top: 2px; font-size: 13px; }
+
+.tog-grp { display: flex; gap: 7px; }
+.tog-btn { flex: 1; padding: 8px; border: 1px solid var(--border-strong); border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; background: var(--secondary); color: var(--muted-foreground); text-align: center; transition: all 0.15s; }
+.tog-btn.active { border-color: var(--ring); background: rgba(185,28,28,0.12); color: var(--foreground); font-weight: 700; }
+
+.req-card { background: var(--secondary); border: 1px solid var(--border-strong); border-radius: 8px; padding: 13px; cursor: pointer; transition: all 0.15s; margin-bottom: 9px; }
+.req-card:hover { border-color: var(--muted-foreground); }
+.req-card.sel { border-color: var(--ring); background: rgba(185,28,28,0.08); }
+.rc-hdr { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 7px; }
+.rc-title { font-weight: 700; font-size: 14px; color: var(--foreground); }
+.rc-meta { font-size: 12px; color: var(--muted-foreground); display: flex; gap: 10px; flex-wrap: wrap; }
+
+.sbadge { padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; }
+.sbadge.phod { background: var(--pend-bg); color: #fbbf24; }
+.sbadge.pprin { background: rgba(59,130,246,0.12); color: #60a5fa; }
+.sbadge.appr { background: var(--avail-bg); color: #4ade80; }
+.sbadge.rej { background: var(--booked-bg); color: #f87171; }
+
+.appr-form { background: var(--secondary); border: 1px solid var(--border-strong); border-radius: 8px; padding: 15px; margin-top: 14px; }
+.appr-form-title { font-size: 13px; font-weight: 700; margin-bottom: 11px; color: var(--primary); }
+.req-mand { font-size: 10px; color: #f87171; font-weight: 700; }
+.divider { height: 1px; background: var(--border); margin: 14px 0; }
+.no-items { text-align: center; color: var(--muted-foreground); font-size: 13px; padding: 24px 0; }
+.no-icon { font-size: 24px; margin-bottom: 6px; }
+
+/* Pipeline */
+.pipe-board { display: grid; grid-template-columns: repeat(4,1fr); gap: 11px; }
+.pipe-col { background: var(--secondary); border: 1px solid var(--border); border-radius: 8px; padding: 12px; min-height: 200px; }
+.pipe-col-hdr { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 2px solid; display: flex; justify-content: space-between; align-items: center; }
+.col-phod .pipe-col-hdr { color: #fbbf24; border-color: var(--pend); }
+.col-pprin .pipe-col-hdr { color: #60a5fa; border-color: #3b82f6; }
+.col-appr .pipe-col-hdr { color: #4ade80; border-color: var(--avail); }
+.col-rej .pipe-col-hdr { color: #f87171; border-color: var(--booked); }
+.col-cnt { background: rgba(255,255,255,0.08); border-radius: 99px; padding: 1px 7px; font-size: 10px; color: var(--muted-foreground); }
+.pipe-card { background: var(--background); border: 1px solid var(--border-strong); border-radius: 6px; padding: 10px; margin-bottom: 7px; font-size: 12px; cursor: pointer; transition: all 0.15s; border-left: 3px solid; }
+.pipe-card:hover { transform: translateY(-1px); border-color: var(--muted-foreground); }
+.col-phod .pipe-card { border-left-color: var(--pend); }
+.col-pprin .pipe-card { border-left-color: #3b82f6; }
+.col-appr .pipe-card { border-left-color: var(--avail); }
+.col-rej .pipe-card { border-left-color: var(--booked); }
+.pc-title { font-weight: 700; margin-bottom: 3px; line-height: 1.3; color: var(--foreground); }
+.pc-venue,.pc-date { color: var(--muted-foreground); margin-bottom: 2px; }
+
+/* Audit trail */
+.audit { position: relative; padding-left: 22px; }
+.audit::before { content: ''; position: absolute; left: 6px; top: 0; bottom: 0; width: 2px; background: var(--border-strong); }
+.a-item { position: relative; margin-bottom: 14px; }
+.a-item::before { content: ''; position: absolute; left: -19px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--primary); border: 2px solid var(--surface); box-shadow: 0 0 0 2px var(--primary); }
+.a-item.appr::before { background: var(--avail); box-shadow: 0 0 0 2px var(--avail); }
+.a-item.rej::before { background: var(--booked); box-shadow: 0 0 0 2px var(--booked); }
+.a-action { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+.a-role { font-size: 11px; color: var(--muted-foreground); margin-bottom: 3px; }
+.a-rmk { background: var(--secondary); border-radius: 6px; padding: 7px 10px; font-size: 12px; font-style: italic; border-left: 2px solid var(--border-strong); color: var(--muted-foreground); }
+.a-time { font-size: 10px; color: var(--muted-foreground); margin-top: 3px; }
+
+/* Toast */
+.toast-wrap { position: fixed; bottom: 22px; right: 22px; z-index: 1000; display: flex; flex-direction: column; gap: 7px; max-width: 370px; }
+.toast { background: var(--surface); border: 1px solid var(--border-strong); border-radius: 8px; padding: 12px 15px; box-shadow: 0 8px 32px rgba(0,0,0,0.4); display: flex; align-items: flex-start; gap: 11px; animation: slideIn .3s cubic-bezier(.16,1,.3,1); }
+.toast.success { border-left: 3px solid var(--avail); }
+.toast.warning { border-left: 3px solid var(--pend); }
+.toast.error { border-left: 3px solid var(--booked); }
+.toast.info { border-left: 3px solid #3b82f6; }
+.toast-icon { font-size: 16px; flex-shrink: 0; }
+.toast-cnt { flex: 1; }
+.toast-title { font-weight: 700; font-size: 13px; margin-bottom: 2px; color: var(--foreground); }
+.toast-msg { font-size: 12px; color: var(--muted-foreground); }
+@keyframes slideIn { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(120%); opacity: 0; } }
+.toast.out { animation: slideOut .25s ease forwards; }
 </style>
 </head>
 <body>
 <header class="hdr">
-  <div><div class="logo-main">NSSCE</div><div class="logo-sub">Palakkad &middot; KTU</div></div>
+  <div class="logo-wrap"><div class="logo-main">NSSCE</div><div class="logo-sub">Palakkad &middot; KTU</div></div>
   <div class="hdiv"></div>
   <div class="hdr-title">Campus Venue Booking System</div>
   <span class="rlbl">Logged in as</span>
@@ -200,21 +295,37 @@ rect.vr{transition:all .3s ease}
     <option value="HOD_ADM">HOD &ndash; Administration</option>
     <option value="PRINCIPAL">Principal</option>
   </select>
-  <button class="notif-btn" id="notifBtn" onclick="openApprovalModal()" title="Pending Approvals">&#128276;<span class="nbadge" id="nbadge">0</span></button>
-  <button class="pipe-btn" onclick="openPipelineModal()">&#128203; Pipeline Board</button>
+  <button class="notif-btn" id="notifBtn" onclick="openApprovalModal()" title="Pending Approvals">
+    <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+    <span class="nbadge" id="nbadge">0</span>
+  </button>
+  <button class="pipe-btn" onclick="openPipelineModal()">
+    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+    Pipeline
+  </button>
+  <a class="home-btn" href="index.html">
+    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    Home
+  </a>
 </header>
 <div class="layout">
   <aside class="sb">
     <div class="sb-sec">
-      <div class="sb-title">&#128197; Select Time Slot</div>
+      <div class="sb-title">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Select Time Slot
+      </div>
       <div class="fl"><label>Start Date</label><input type="date" class="finp" id="sd"></div>
       <div class="fl"><label>Start Time</label><input type="time" class="finp" id="st" value="09:00"></div>
       <div class="fl"><label>End Date</label><input type="date" class="finp" id="ed"></div>
       <div class="fl"><label>End Time</label><input type="time" class="finp" id="et" value="17:00"></div>
-      <button class="btn-chk" onclick="checkAvail()">&#128269; Check Availability</button>
+      <button class="btn-chk" onclick="checkAvail()">Check Availability</button>
     </div>
     <div class="sb-sec">
-      <div class="sb-title">&#128204; Legend</div>
+      <div class="sb-title">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Legend
+      </div>
       <div class="leg-item"><div class="leg-dot" style="background:var(--avail-bg);border:2px solid var(--avail)"></div><span>Available</span></div>
       <div class="leg-item"><div class="leg-dot" style="background:var(--pend-bg);border:2px solid var(--pend)"></div><span>Pending Request</span></div>
       <div class="leg-item"><div class="leg-dot" style="background:var(--booked-bg);border:2px solid var(--booked)"></div><span>Booked / Approved</span></div>
@@ -223,12 +334,15 @@ rect.vr{transition:all .3s ease}
     <div class="act-sec" id="actSec" style="display:none">
       <div class="act-title" id="actTitle">Pending Reviews</div>
       <div class="act-p" id="actDesc">You have pending venue requests.</div>
-      <div style="display:flex;align-items:center;margin-bottom:10px"><span style="font-size:12px;color:rgba(255,255,255,.75)">Pending:</span><span class="pcount" id="pcount">0</span></div>
+      <div style="display:flex;align-items:center;margin-bottom:10px"><span style="font-size:12px;color:rgba(255,255,255,.7)">Pending:</span><span class="pcount" id="pcount">0</span></div>
       <button class="btn-act" onclick="openApprovalModal()">Review Requests &rarr;</button>
     </div>
     <div class="sb-sec">
-      <div class="sb-title">&#9881;&#65039; Demo Controls</div>
-      <button class="btn-rst" onclick="resetDemo()">&#128260; Reset Demo Data</button>
+      <div class="sb-title">
+        <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        Demo Controls
+      </div>
+      <button class="btn-rst" onclick="resetDemo()">Reset Demo Data</button>
     </div>
   </aside>
   <main class="map-area" id="mapArea">
@@ -241,29 +355,30 @@ rect.vr{transition:all .3s ease}
 <div class="tt" id="tt"><div class="tt-name" id="tt-name"></div><div class="tt-dept" id="tt-dept"></div><div class="tt-cap" id="tt-cap"></div><div class="tt-st" id="tt-st"></div></div>
 <div class="vpanel" id="vpanel">
   <div class="vph">
-    <button class="vpc" onclick="closeVP()">&#10005;</button>
+    <button class="vpc" onclick="closeVP()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     <div class="vpn" id="vp-name">Venue</div>
     <div class="vpd" id="vp-dept">Department</div>
     <div class="vp-chip chip-def" id="vp-chip"><span id="vp-chip-txt">Select a time range first</span></div>
   </div>
   <div class="vpbody">
-    <div class="vps"><div class="vps-t">Capacity</div><div class="cap-big"><span id="vp-cap">&#8212;</span><span class="cap-lbl">seats</span></div></div>
+    <div class="vps"><div class="vps-t">Capacity</div><div class="cap-big"><span id="vp-cap">&mdash;</span><span class="cap-lbl">seats</span></div></div>
     <div class="vps"><div class="vps-t">Features</div><div class="feat-grid" id="vp-feats"></div></div>
     <div class="vps"><div class="vps-t">Approval Route</div>
-      <div class="route-box"><div class="route-lbl">Venue owned by</div><div class="route-val" id="vp-owner">&#8212;</div><div style="margin-top:8px" class="route-lbl">Approval goes to</div><div class="route-val" id="vp-hod">&#8212;</div></div>
+      <div class="route-box"><div class="route-lbl">Venue owned by</div><div class="route-val" id="vp-owner">&mdash;</div><div style="margin-top:8px" class="route-lbl">Approval goes to</div><div class="route-val" id="vp-hod">&mdash;</div></div>
     </div>
-    <div class="vps"><div class="vps-t">Upcoming Bookings</div><div id="vp-bks"><div class="no-items"><div class="no-icon">&#128197;</div>No upcoming bookings</div></div></div>
+    <div class="vps"><div class="vps-t">Upcoming Bookings</div><div id="vp-bks"><div class="no-items">No upcoming bookings</div></div></div>
   </div>
   <div class="vpfoot">
-    <button class="btn-book" id="bookBtn" onclick="openReqForm()">&#128204; Request This Venue</button>
+    <button class="btn-book" id="bookBtn" onclick="openReqForm()">Request This Venue</button>
     <div class="book-hint" id="bookHint"></div>
   </div>
 </div>
+<!-- Request Modal -->
 <div class="moverlay" id="reqModal">
   <div class="modal">
-    <div class="mhdr"><div><div class="mtitle">&#128203; New Venue Request</div><div class="msubt" id="req-subt">&#8212;</div></div><button class="mcls" onclick="closeModal('reqModal')">&#10005;</button></div>
+    <div class="mhdr"><div><div class="mtitle">New Venue Request</div><div class="msubt" id="req-subt">&mdash;</div></div><button class="mcls" onclick="closeModal('reqModal')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
     <div class="mbody">
-      <div class="info-box"><div class="ib-row"><div><div class="ib-lbl">Venue</div><div class="ib-val" id="ri-venue">&#8212;</div></div><div><div class="ib-lbl">Date</div><div class="ib-val" id="ri-date">&#8212;</div></div><div><div class="ib-lbl">Time</div><div class="ib-val" id="ri-time">&#8212;</div></div></div></div>
+      <div class="info-box"><div class="ib-row"><div><div class="ib-lbl">Venue</div><div class="ib-val" id="ri-venue">&mdash;</div></div><div><div class="ib-lbl">Date</div><div class="ib-val" id="ri-date">&mdash;</div></div><div><div class="ib-lbl">Time</div><div class="ib-val" id="ri-time">&mdash;</div></div></div></div>
       <div class="fg"><label class="flbl">Event Title *</label><input class="finm" id="r-title" placeholder="e.g., IEEE Workshop on ML"></div>
       <div class="fg"><label class="flbl">Description *</label><textarea class="ftxt" id="r-desc" placeholder="Objectives, expected outcomes..."></textarea></div>
       <div class="frow">
@@ -272,7 +387,7 @@ rect.vr{transition:all .3s ease}
       </div>
       <div class="frow">
         <div class="fg"><label class="flbl">Expected Attendance *</label><input class="finm" type="number" id="r-att" placeholder="No. of attendees" min="1"></div>
-        <div class="fg"><label class="flbl">KTU Activity Points?</label><div class="tog-grp"><button class="tog-btn" id="ktu-y" onclick="setKtu(true)">&#10003; Yes</button><button class="tog-btn active" id="ktu-n" onclick="setKtu(false)">&#10007; No</button></div></div>
+        <div class="fg"><label class="flbl">KTU Activity Points?</label><div class="tog-grp"><button class="tog-btn" id="ktu-y" onclick="setKtu(true)">Yes</button><button class="tog-btn active" id="ktu-n" onclick="setKtu(false)">No</button></div></div>
       </div>
       <div class="fg" id="ktu-cat-g" style="display:none"><label class="flbl">KTU Segment</label>
         <select class="fsel" id="r-ktu"><option value="">Select segment...</option><option value="SEG2">Segment 2 &ndash; Professional Self-Initiatives</option><option value="SEG3">Segment 3 &ndash; Industry &amp; Entrepreneurship</option><option value="SEG6">Segment 6 &ndash; Cultural &amp; Sports</option><option value="SEG7">Segment 7 &ndash; Social Service</option></select>
@@ -282,9 +397,10 @@ rect.vr{transition:all .3s ease}
     <div class="mfoot"><button class="btn btn-gh" onclick="closeModal('reqModal')">Cancel</button><button class="btn btn-pri" onclick="submitReq()">Submit for Approval &rarr;</button></div>
   </div>
 </div>
+<!-- Approvals Modal -->
 <div class="moverlay" id="apprModal">
   <div class="modal" style="max-width:720px">
-    <div class="mhdr"><div><div class="mtitle" id="am-title">Review Requests</div><div class="msubt" id="am-subt">Pending decisions</div></div><button class="mcls" onclick="closeModal('apprModal')">&#10005;</button></div>
+    <div class="mhdr"><div><div class="mtitle" id="am-title">Review Requests</div><div class="msubt" id="am-subt">Pending decisions</div></div><button class="mcls" onclick="closeModal('apprModal')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
     <div class="mbody">
       <div id="am-list"></div>
       <div id="am-form" style="display:none">
@@ -299,18 +415,20 @@ rect.vr{transition:all .3s ease}
         </div>
       </div>
     </div>
-    <div class="mfoot"><button class="btn btn-gh" onclick="closeModal('apprModal')">Close</button><button class="btn btn-rej" id="am-rej" style="display:none" onclick="doReject()">&#10007; Reject</button><button class="btn btn-appr" id="am-appr" style="display:none" onclick="doApprove()">&#10003; Approve</button></div>
+    <div class="mfoot"><button class="btn btn-gh" onclick="closeModal('apprModal')">Close</button><button class="btn btn-rej" id="am-rej" style="display:none" onclick="doReject()">Reject</button><button class="btn btn-appr" id="am-appr" style="display:none" onclick="doApprove()">Approve</button></div>
   </div>
 </div>
+<!-- Pipeline Modal -->
 <div class="moverlay" id="pipeModal">
   <div class="modal" style="max-width:1050px;width:95vw">
-    <div class="mhdr"><div><div class="mtitle">&#128202; Event Pipeline Board</div><div class="msubt">Real-time status of all venue requests</div></div><button class="mcls" onclick="closeModal('pipeModal')">&#10005;</button></div>
+    <div class="mhdr"><div><div class="mtitle">Event Pipeline Board</div><div class="msubt">Real-time status of all venue requests</div></div><button class="mcls" onclick="closeModal('pipeModal')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
     <div class="mbody" style="padding:14px"><div class="pipe-board" id="pipeboard"></div></div>
   </div>
 </div>
+<!-- Event Detail Modal -->
 <div class="moverlay" id="evtModal">
   <div class="modal" style="max-width:580px">
-    <div class="mhdr"><div><div class="mtitle" id="ev-title">Event Details</div><div class="msubt" id="ev-st">Status</div></div><button class="mcls" onclick="closeModal('evtModal')">&#10005;</button></div>
+    <div class="mhdr"><div><div class="mtitle" id="ev-title">Event Details</div><div class="msubt" id="ev-st">Status</div></div><button class="mcls" onclick="closeModal('evtModal')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
     <div class="mbody" id="ev-body"></div>
     <div class="mfoot"><button class="btn btn-gh" onclick="closeModal('evtModal')">Close</button></div>
   </div>
@@ -366,7 +484,8 @@ const LAYOUT={
     'V-CE-01':{x:685,y:495,w:300,h:55},'V-CE-02':{x:685,y:560,w:143,h:50},'V-CE-03':{x:838,y:560,w:147,h:50},'V-CE-04':{x:685,y:620,w:300,h:48},
   }
 };
-const DC={ADM:{bg:'rgba(123,28,28,.04)',st:'rgba(123,28,28,.25)'},CSE:{bg:'rgba(37,99,235,.04)',st:'rgba(37,99,235,.25)'},ECE:{bg:'rgba(124,58,237,.04)',st:'rgba(124,58,237,.25)'},EEE:{bg:'rgba(234,88,12,.04)',st:'rgba(234,88,12,.25)'},ME:{bg:'rgba(20,184,166,.04)',st:'rgba(20,184,166,.25)'},ICE:{bg:'rgba(219,39,119,.04)',st:'rgba(219,39,119,.25)'},CE:{bg:'rgba(101,163,13,.04)',st:'rgba(101,163,13,.25)'}};
+// Dark-mode dept bg / stroke colors
+const DC={ADM:{bg:'rgba(185,28,28,.06)',st:'rgba(185,28,28,.2)'},CSE:{bg:'rgba(37,99,235,.06)',st:'rgba(37,99,235,.2)'},ECE:{bg:'rgba(124,58,237,.06)',st:'rgba(124,58,237,.2)'},EEE:{bg:'rgba(234,88,12,.06)',st:'rgba(234,88,12,.2)'},ME:{bg:'rgba(20,184,166,.06)',st:'rgba(20,184,166,.2)'},ICE:{bg:'rgba(219,39,119,.06)',st:'rgba(219,39,119,.2)'},CE:{bg:'rgba(101,163,13,.06)',st:'rgba(101,163,13,.2)'}};
 const S={role:'CLUB_HEAD',venueId:null,sd:'',st:'09:00',ed:'',et:'17:00',avail:{},checked:false,selReqId:null};
 const KEY='nssce_events_v3';
 const getEvts=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}};
@@ -390,41 +509,48 @@ function seed(){
 const toMs=(d,t)=>new Date(d+'T'+t+':00').getTime();
 function overlaps(e,sd,st,ed,et){return toMs(e.sd,e.st)<toMs(ed,et)&&toMs(e.ed,e.et)>toMs(sd,st)}
 function computeAvail(sd,st,ed,et){const a={};VENUES.forEach(v=>{a[v.id]='AVAILABLE'});getEvts().forEach(e=>{if(!overlaps(e,sd,st,ed,et))return;if(e.status==='APPROVED')a[e.venueId]='BOOKED';else if(['PENDING_HOD','PENDING_PRINCIPAL'].includes(e.status)&&a[e.venueId]!=='BOOKED')a[e.venueId]='PENDING'});return a}
-function getSty(status){switch(status){case'AVAILABLE':return{fill:'#DCFCE7',stroke:'#16A34A',sw:2};case'PENDING':return{fill:'#FEF9C3',stroke:'#D97706',sw:2};case'BOOKED':return{fill:'#FEE2E2',stroke:'#DC2626',sw:2};default:return{fill:'#F3F4F6',stroke:'#D1D5DB',sw:1.5}}}
+function getSty(status){
+  switch(status){
+    case'AVAILABLE':return{fill:'rgba(22,163,74,0.12)',stroke:'#16a34a',sw:1.5};
+    case'PENDING':return{fill:'rgba(217,119,6,0.12)',stroke:'#d97706',sw:1.5};
+    case'BOOKED':return{fill:'rgba(220,38,38,0.12)',stroke:'#dc2626',sw:1.5};
+    default:return{fill:'rgba(63,63,70,0.4)',stroke:'#3f3f46',sw:1};
+  }
+}
 function renderSVG(){
   const svg=document.getElementById('csvg');let h='';
-  h+='<rect width="1000" height="685" fill="#DDD8CF"/>';
-  h+='<rect x="0" y="220" width="1000" height="10" fill="#C9C3BB" opacity=".7"/>';
-  h+='<rect x="0" y="447" width="1000" height="13" fill="#C9C3BB" opacity=".7"/>';
-  h+='<rect x="325" y="220" width="15" height="460" fill="#C9C3BB" opacity=".7"/>';
-  h+='<rect x="660" y="220" width="15" height="460" fill="#C9C3BB" opacity=".7"/>';
-  h+='<line x1="0" y1="225" x2="1000" y2="225" stroke="white" stroke-width="1" stroke-dasharray="20,15" opacity=".4"/>';
-  h+='<line x1="332" y1="220" x2="332" y2="680" stroke="white" stroke-width="1" stroke-dasharray="20,15" opacity=".4"/>';
-  h+='<line x1="667" y1="220" x2="667" y2="680" stroke="white" stroke-width="1" stroke-dasharray="20,15" opacity=".4"/>';
-  LAYOUT.depts.forEach(b=>{const dc=DC[b.dept];h+=`<rect x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" rx="10" fill="${dc.bg}" stroke="${dc.st}" stroke-width="1.5"/><text x="${b.lx}" y="${b.ly}" text-anchor="middle" font-family="Poppins,sans-serif" font-size="10" font-weight="700" fill="rgba(123,28,28,.5)" letter-spacing="1.5">${DEPTS[b.dept].name.toUpperCase()}</text>`});
+  h+='<rect width="1000" height="685" fill="#000000" rx="0"/>';
+  // Road lines
+  h+='<rect x="0" y="220" width="1000" height="10" fill="#18181b" opacity=".8"/>';
+  h+='<rect x="0" y="447" width="1000" height="13" fill="#18181b" opacity=".8"/>';
+  h+='<rect x="325" y="220" width="15" height="460" fill="#18181b" opacity=".8"/>';
+  h+='<rect x="660" y="220" width="15" height="460" fill="#18181b" opacity=".8"/>';
+  h+='<line x1="0" y1="225" x2="1000" y2="225" stroke="#27272a" stroke-width="1" stroke-dasharray="20,15" opacity=".6"/>';
+  h+='<line x1="332" y1="220" x2="332" y2="680" stroke="#27272a" stroke-width="1" stroke-dasharray="20,15" opacity=".6"/>';
+  h+='<line x1="667" y1="220" x2="667" y2="680" stroke="#27272a" stroke-width="1" stroke-dasharray="20,15" opacity=".6"/>';
+  LAYOUT.depts.forEach(b=>{const dc=DC[b.dept];h+=`<rect x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" rx="10" fill="${dc.bg}" stroke="${dc.st}" stroke-width="1.5"/><text x="${b.lx}" y="${b.ly}" text-anchor="middle" font-family="Poppins,sans-serif" font-size="10" font-weight="700" fill="rgba(161,161,170,.5)" letter-spacing="1.5">${DEPTS[b.dept].name.toUpperCase()}</text>`});
   VENUES.forEach(venue=>{
     const l=LAYOUT.venues[venue.id];if(!l)return;
     const av=S.avail[venue.id];const sty=getSty(S.checked?av:undefined);
     const cx=l.x+l.w/2,cy=l.y+l.h/2;
     const fs=l.h<45?9:l.w<160?10:11;
     const sel=venue.id===S.venueId;
-    const stroke=sel?'#7B1C1C':sty.stroke;const sw=sel?3:sty.sw;
-    // Status dot: small circle top-right, colored only when checked
+    const stroke=sel?'#fafafa':sty.stroke;const sw=sel?2.5:sty.sw;
     const dotR=4;
     const dotX=l.x+l.w-dotR-5;
     const dotY=l.y+dotR+5;
-    const dotFill=S.checked?(av==='AVAILABLE'?'#16A34A':av==='PENDING'?'#D97706':av==='BOOKED'?'#DC2626':'#D1D5DB'):'#D1D5DB';
+    const dotFill=S.checked?(av==='AVAILABLE'?'#16a34a':av==='PENDING'?'#d97706':av==='BOOKED'?'#dc2626':'#52525b'):'#52525b';
     h+=`<g class="venue-group" onclick="onVC('${venue.id}')" onmouseenter="showTT(event,'${venue.id}')" onmouseleave="hideTT()">
       <rect id="vr-${venue.id}" class="vr" x="${l.x}" y="${l.y}" width="${l.w}" height="${l.h}" rx="7" fill="${sty.fill}" stroke="${stroke}" stroke-width="${sw}"/>
-      <text x="${cx}" y="${cy+4}" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600" font-size="${fs}" fill="#1A1A1A" style="pointer-events:none">${venue.name}</text>
+      <text x="${cx}" y="${cy+4}" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600" font-size="${fs}" fill="#fafafa" style="pointer-events:none">${venue.name}</text>
       <circle id="dot-${venue.id}" cx="${dotX}" cy="${dotY}" r="${dotR}" fill="${dotFill}" style="pointer-events:none"/>
     </g>`;
   });
-  h+='<text x="975" y="670" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#9CA3AF" font-weight="700">N \u2191</text>';
-  h+='<text x="500" y="680" text-anchor="middle" font-family="Poppins,sans-serif" font-size="9" fill="#9CA3AF" letter-spacing="2">NSS COLLEGE OF ENGINEERING, AKATHETHARA, PALAKKAD</text>';
+  h+='<text x="975" y="670" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#52525b" font-weight="700">N \u2191</text>';
+  h+='<text x="500" y="680" text-anchor="middle" font-family="Poppins,sans-serif" font-size="9" fill="#52525b" letter-spacing="2">NSS COLLEGE OF ENGINEERING, AKATHETHARA, PALAKKAD</text>';
   svg.innerHTML=h;
 }
-function refreshMap(){VENUES.forEach(v=>{const r=document.getElementById('vr-'+v.id);if(!r)return;const av=S.avail[v.id];const sty=getSty(S.checked?av:undefined);r.setAttribute('fill',sty.fill);r.setAttribute('stroke',v.id===S.venueId?'#7B1C1C':sty.stroke);r.setAttribute('stroke-width',v.id===S.venueId?3:sty.sw);const dot=document.getElementById('dot-'+v.id);if(dot){dot.setAttribute('fill',S.checked?(av==='AVAILABLE'?'#16A34A':av==='PENDING'?'#D97706':av==='BOOKED'?'#DC2626':'#D1D5DB'):'#D1D5DB')}})}
+function refreshMap(){VENUES.forEach(v=>{const r=document.getElementById('vr-'+v.id);if(!r)return;const av=S.avail[v.id];const sty=getSty(S.checked?av:undefined);r.setAttribute('fill',sty.fill);r.setAttribute('stroke',v.id===S.venueId?'#fafafa':sty.stroke);r.setAttribute('stroke-width',v.id===S.venueId?2.5:sty.sw);const dot=document.getElementById('dot-'+v.id);if(dot){dot.setAttribute('fill',S.checked?(av==='AVAILABLE'?'#16a34a':av==='PENDING'?'#d97706':av==='BOOKED'?'#dc2626':'#52525b'):'#52525b')}})}
 function showTT(evt,id){const v=VENUES.find(x=>x.id===id);if(!v)return;const av=S.avail[id];document.getElementById('tt-name').textContent=v.fullName||v.name;document.getElementById('tt-dept').textContent=DEPTS[v.dept].name;document.getElementById('tt-cap').textContent='Capacity: '+v.cap;let st=S.checked?(av==='AVAILABLE'?'Available':av==='PENDING'?'Pending Request':'Booked'):'Select a time range to check';document.getElementById('tt-st').textContent=st;const tt=document.getElementById('tt');tt.style.display='block';moveTT(evt)}
 function moveTT(e){const tt=document.getElementById('tt');const x=e.clientX+14,y=e.clientY-10;tt.style.left=Math.min(x,window.innerWidth-tt.offsetWidth-10)+'px';tt.style.top=y+'px'}
 function hideTT(){document.getElementById('tt').style.display='none'}
@@ -450,15 +576,15 @@ function openVP(id){
   document.getElementById('vp-hod').textContent=dep.hod;
   const chip=document.getElementById('vp-chip');chip.className='vp-chip';const ct=document.getElementById('vp-chip-txt');
   if(!S.checked){chip.classList.add('chip-def');ct.textContent='Select a time range first'}
-  else if(av==='AVAILABLE'){chip.classList.add('chip-avail');ct.textContent='\uD83D\uDFE2 Available for selected time'}
-  else if(av==='PENDING'){chip.classList.add('chip-pend');ct.textContent='\uD83D\uDFE1 Pending request in this slot'}
-  else{chip.classList.add('chip-book');ct.textContent='\uD83D\uDD34 Already booked in this slot'}
+  else if(av==='AVAILABLE'){chip.classList.add('chip-avail');ct.textContent='Available for selected time'}
+  else if(av==='PENDING'){chip.classList.add('chip-pend');ct.textContent='Pending request in this slot'}
+  else{chip.classList.add('chip-book');ct.textContent='Already booked in this slot'}
   document.getElementById('vp-feats').innerHTML=v.feats.map(f=>`<div class="feat-chip">${fIcon(f)} ${f}</div>`).join('');
   const bks=getEvts().filter(e=>e.venueId===id&&['APPROVED','PENDING_HOD','PENDING_PRINCIPAL'].includes(e.status)&&toMs(e.ed,e.et)>Date.now()).sort((a,b)=>toMs(a.sd,a.st)-toMs(b.sd,b.st));
   const bc=document.getElementById('vp-bks');
-  bc.innerHTML=bks.length?bks.slice(0,5).map(e=>`<div class="bk-item ${e.status==='APPROVED'?'bk-appr':'bk-pend'}"><div class="bk-title">${e.title}</div><div class="bk-time">\uD83D\uDCC5 ${fmtRange(e.sd,e.st,e.ed,e.et)}</div><div class="bk-time">\uD83D\uDC65 ${e.club}</div><span class="bk-badge ${e.status==='APPROVED'?'appr':'pend'}">${e.status==='APPROVED'?'Approved':'Pending'}</span></div>`).join(''):'<div class="no-items"><div class="no-icon">\uD83D\uDCC5</div>No upcoming bookings</div>';
+  bc.innerHTML=bks.length?bks.slice(0,5).map(e=>`<div class="bk-item ${e.status==='APPROVED'?'bk-appr':'bk-pend'}"><div class="bk-title">${e.title}</div><div class="bk-time">${fmtRange(e.sd,e.st,e.ed,e.et)}</div><div class="bk-time">${e.club}</div><span class="bk-badge ${e.status==='APPROVED'?'appr':'pend'}">${e.status==='APPROVED'?'Approved':'Pending'}</span></div>`).join(''):'<div class="no-items">No upcoming bookings</div>';
   const bb=document.getElementById('bookBtn'),bh=document.getElementById('bookHint');
-  if(S.role==='CLUB_HEAD'){bb.style.display='flex';if(!S.checked){bb.disabled=true;bh.textContent='Select a time range first'}else if(av==='BOOKED'){bb.disabled=true;bh.textContent='Venue already booked for this slot'}else{bb.disabled=false;bh.textContent=av==='PENDING'?'\u26A0\uFE0F Another request pending for this slot':''}}
+  if(S.role==='CLUB_HEAD'){bb.style.display='flex';if(!S.checked){bb.disabled=true;bh.textContent='Select a time range first'}else if(av==='BOOKED'){bb.disabled=true;bh.textContent='Venue already booked for this slot'}else{bb.disabled=false;bh.textContent=av==='PENDING'?'Another request is pending for this slot':''}}
   else{bb.style.display='none';bh.textContent='Switch to Club Head role to request a venue'}
   document.getElementById('vpanel').classList.add('open');
 }
@@ -482,7 +608,7 @@ function submitReq(){
   const v=VENUES.find(x=>x.id===S.venueId);
   addEvt({id:uid(),title,desc,venueId:S.venueId,club,cat,att:parseInt(att),ktu:ktuOn,ktuCat:ktuOn?document.getElementById('r-ktu').value:'',spec:document.getElementById('r-spec').value.trim(),sd:S.sd,st:S.st,ed:S.ed,et:S.et,status:'PENDING_HOD',hodRmk:'',prinRmk:'',subAt:new Date().toISOString(),hodAt:null,prinAt:null});
   closeModal('reqModal');closeVP();if(S.checked){S.avail=computeAvail(S.sd,S.st,S.ed,S.et);refreshMap()}updBadge();
-  toast(`Request for ${v.fullName||v.name} sent to ${DEPTS[v.dept].hod}`,'success','Request Submitted! \uD83C\uDF89');
+  toast(`Request for ${v.fullName||v.name} sent to ${DEPTS[v.dept].hod}`,'success','Request Submitted');
 }
 function getPending(role){const evts=getEvts();if(role==='PRINCIPAL')return evts.filter(e=>e.status==='PENDING_PRINCIPAL');const dept=ROLE_DEPT[role];if(!dept)return[];return evts.filter(e=>{if(e.status!=='PENDING_HOD')return false;const v=VENUES.find(x=>x.id===e.venueId);return v&&v.dept===dept})}
 function updBadge(){
@@ -493,29 +619,29 @@ function updBadge(){
 function openApprovalModal(){
   if(S.role==='CLUB_HEAD'){openPipelineModal();return}
   const p=getPending(S.role);S.selReqId=null;const isPrin=S.role==='PRINCIPAL';const dept=ROLE_DEPT[S.role];
-  document.getElementById('am-title').textContent=isPrin?'\uD83C\uDFDB\uFE0F Principal \u2013 Final Approval':'\uD83C\uDFE2 HOD Review \u2014 '+(dept?DEPTS[dept].name:'');
+  document.getElementById('am-title').textContent=isPrin?'Principal \u2013 Final Approval':'HOD Review \u2014 '+(dept?DEPTS[dept].name:'');
   document.getElementById('am-subt').textContent=isPrin?'HOD-approved requests awaiting your decision':'Venue requests for your department';
   renderApprList(p);document.getElementById('am-form').style.display='none';document.getElementById('am-rej').style.display='none';document.getElementById('am-appr').style.display='none';openModal('apprModal');
 }
 function renderApprList(evts){
   const c=document.getElementById('am-list');
-  if(!evts.length){c.innerHTML='<div class="no-items"><div class="no-icon">\u2705</div>No pending requests</div>';return}
-  c.innerHTML=evts.map(e=>{const v=VENUES.find(x=>x.id===e.venueId);return`<div class="req-card" id="rc-${e.id}" onclick="selReq('${e.id}')"><div class="rc-hdr"><div class="rc-title">${e.title}</div><span class="${sbClass(e.status)}">${sbLabel(e.status)}</span></div><div class="rc-meta"><span>\uD83C\uDFE2 ${v?v.fullName||v.name:'?'}</span><span>\uD83D\uDC65 ${e.club}</span><span>\uD83D\uDCC5 ${fmtRange(e.sd,e.st,e.ed,e.et)}</span></div>${e.hodRmk?`<div style="margin-top:7px;font-size:12px;color:#6B7280;font-style:italic;border-left:2px solid #E5E7EB;padding-left:8px">HOD: "${e.hodRmk}"</div>`:''}</div>`}).join('');
+  if(!evts.length){c.innerHTML='<div class="no-items">No pending requests</div>';return}
+  c.innerHTML=evts.map(e=>{const v=VENUES.find(x=>x.id===e.venueId);return`<div class="req-card" id="rc-${e.id}" onclick="selReq('${e.id}')"><div class="rc-hdr"><div class="rc-title">${e.title}</div><span class="${sbClass(e.status)}">${sbLabel(e.status)}</span></div><div class="rc-meta"><span>${v?v.fullName||v.name:'?'}</span><span>${e.club}</span><span>${fmtRange(e.sd,e.st,e.ed,e.et)}</span></div>${e.hodRmk?`<div style="margin-top:7px;font-size:12px;color:var(--muted-foreground);font-style:italic;border-left:2px solid var(--border-strong);padding-left:8px">HOD: "${e.hodRmk}"</div>`:''}</div>`}).join('');
 }
 function selReq(id){
   S.selReqId=id;document.querySelectorAll('.req-card').forEach(c=>c.classList.remove('sel'));const card=document.getElementById('rc-'+id);if(card)card.classList.add('sel');
   const e=getEvts().find(x=>x.id===id);if(!e)return;const v=VENUES.find(x=>x.id===e.venueId);const isPrin=S.role==='PRINCIPAL';
   document.getElementById('am-form').style.display='block';
   document.getElementById('am-form-title').textContent='Reviewing: '+e.title;
-  document.getElementById('am-detail').innerHTML=`<div class="info-box"><div class="ib-row" style="flex-wrap:wrap;gap:12px"><div><div class="ib-lbl">Venue</div><div class="ib-val">${v?v.fullName||v.name:'?'}</div></div><div><div class="ib-lbl">Club</div><div class="ib-val">${e.club}</div></div><div><div class="ib-lbl">Date &amp; Time</div><div class="ib-val">${fmtRange(e.sd,e.st,e.ed,e.et)}</div></div><div><div class="ib-lbl">Attendance</div><div class="ib-val">${e.att}</div></div><div><div class="ib-lbl">Category</div><div class="ib-val">${e.cat}</div></div><div><div class="ib-lbl">KTU</div><div class="ib-val">${e.ktu?e.ktuCat:'N/A'}</div></div></div>${e.desc?`<div style="margin-top:10px;font-size:13px;color:#374151">${e.desc}</div>`:''} ${e.spec?`<div style="margin-top:7px;font-size:12px;color:#6B7280"><b>Special Req:</b> ${e.spec}</div>`:''} ${isPrin&&e.hodRmk?`<div style="margin-top:10px;padding:10px;background:#FFF9E6;border-radius:7px;border-left:3px solid #D97706"><div style="font-size:10px;font-weight:700;color:#92400e;margin-bottom:3px">HOD'S REMARK</div><div style="font-size:13px;font-style:italic">"${e.hodRmk}"</div></div>`:''}</div>`;
+  document.getElementById('am-detail').innerHTML=`<div class="info-box"><div class="ib-row" style="flex-wrap:wrap;gap:12px"><div><div class="ib-lbl">Venue</div><div class="ib-val">${v?v.fullName||v.name:'?'}</div></div><div><div class="ib-lbl">Club</div><div class="ib-val">${e.club}</div></div><div><div class="ib-lbl">Date & Time</div><div class="ib-val">${fmtRange(e.sd,e.st,e.ed,e.et)}</div></div><div><div class="ib-lbl">Attendance</div><div class="ib-val">${e.att}</div></div><div><div class="ib-lbl">Category</div><div class="ib-val">${e.cat}</div></div><div><div class="ib-lbl">KTU</div><div class="ib-val">${e.ktu?e.ktuCat:'N/A'}</div></div></div>${e.desc?`<div style="margin-top:10px;font-size:13px;color:var(--muted-foreground);line-height:1.6">${e.desc}</div>`:''} ${e.spec?`<div style="margin-top:7px;font-size:12px;color:var(--muted-foreground)"><b>Special Req:</b> ${e.spec}</div>`:''} ${isPrin&&e.hodRmk?`<div style="margin-top:10px;padding:10px;background:rgba(217,119,6,0.08);border-radius:6px;border-left:3px solid var(--pend)"><div style="font-size:10px;font-weight:700;color:#fbbf24;margin-bottom:3px">HOD'S REMARK</div><div style="font-size:13px;font-style:italic;color:var(--muted-foreground)">"${e.hodRmk}"</div></div>`:''}</div>`;
   document.getElementById('am-rmk').value='';document.getElementById('am-rej').style.display='flex';document.getElementById('am-appr').style.display='flex';
   document.getElementById('am-appr').textContent=isPrin?'\u2713 Approve & Publish Event':'\u2713 Approve & Forward to Principal';
 }
 function doApprove(){
   const rmk=document.getElementById('am-rmk').value.trim();if(!rmk){toast('A remark is mandatory','error','Remark Required');document.getElementById('am-rmk').focus();return}
   const e=getEvts().find(x=>x.id===S.selReqId);if(!e)return;
-  if(S.role==='PRINCIPAL'){updEvt(S.selReqId,{status:'APPROVED',prinRmk:rmk,prinAt:new Date().toISOString()});toast(`"${e.title}" approved and published!`,'success','Event Approved & Published! \uD83C\uDF89')}
-  else{updEvt(S.selReqId,{status:'PENDING_PRINCIPAL',hodRmk:rmk,hodAt:new Date().toISOString()});toast('Request forwarded to Principal for final approval','info','HOD Approved \u2713')}
+  if(S.role==='PRINCIPAL'){updEvt(S.selReqId,{status:'APPROVED',prinRmk:rmk,prinAt:new Date().toISOString()});toast(`"${e.title}" approved and published!`,'success','Event Approved & Published')}
+  else{updEvt(S.selReqId,{status:'PENDING_PRINCIPAL',hodRmk:rmk,hodAt:new Date().toISOString()});toast('Request forwarded to Principal for final approval','info','HOD Approved')}
   closeModal('apprModal');if(S.checked){S.avail=computeAvail(S.sd,S.st,S.ed,S.et);refreshMap()}updBadge();S.selReqId=null;
 }
 function doReject(){
@@ -527,8 +653,8 @@ function doReject(){
 function openPipelineModal(){renderPipeline();openModal('pipeModal')}
 function renderPipeline(){
   const evts=getEvts();
-  const cols=[{key:'PENDING_HOD',label:'Pending HOD',cls:'col-phod'},{key:'PENDING_PRINCIPAL',label:'Pending Principal',cls:'col-pprin'},{key:'APPROVED',label:'Approved \u2713',cls:'col-appr'},{key:'REJECTED',label:'Rejected',cls:'col-rej'}];
-  document.getElementById('pipeboard').innerHTML=cols.map(col=>{const ce=evts.filter(e=>col.key==='REJECTED'?e.status.startsWith('REJECTED'):e.status===col.key);return`<div class="pipe-col ${col.cls}"><div class="pipe-col-hdr"><span>${col.label}</span><span class="col-cnt">${ce.length}</span></div>${ce.length?ce.map(e=>{const v=VENUES.find(x=>x.id===e.venueId);return`<div class="pipe-card" onclick="openEvtDetail('${e.id}')"><div class="pc-title">${e.title}</div><div class="pc-venue">\uD83C\uDFE2 ${v?v.fullName||v.name:'?'}</div><div class="pc-date">\uD83D\uDCC5 ${fmtDate(e.sd)}</div><div class="pc-date">\uD83D\uDC65 ${e.club}</div></div>`}).join(''):'<div class="no-items" style="padding:12px 0"><div class="no-icon">\uD83D\uDCED</div>None</div>'}</div>`}).join('');
+  const cols=[{key:'PENDING_HOD',label:'Pending HOD',cls:'col-phod'},{key:'PENDING_PRINCIPAL',label:'Pending Principal',cls:'col-pprin'},{key:'APPROVED',label:'Approved',cls:'col-appr'},{key:'REJECTED',label:'Rejected',cls:'col-rej'}];
+  document.getElementById('pipeboard').innerHTML=cols.map(col=>{const ce=evts.filter(e=>col.key==='REJECTED'?e.status.startsWith('REJECTED'):e.status===col.key);return`<div class="pipe-col ${col.cls}"><div class="pipe-col-hdr"><span>${col.label}</span><span class="col-cnt">${ce.length}</span></div>${ce.length?ce.map(e=>{const v=VENUES.find(x=>x.id===e.venueId);return`<div class="pipe-card" onclick="openEvtDetail('${e.id}')"><div class="pc-title">${e.title}</div><div class="pc-venue">${v?v.fullName||v.name:'?'}</div><div class="pc-date">${fmtDate(e.sd)}</div><div class="pc-date">${e.club}</div></div>`}).join(''):'<div class="no-items" style="padding:12px 0">None</div>'}</div>`}).join('');
 }
 function openEvtDetail(id){
   const e=getEvts().find(x=>x.id===id);if(!e)return;const v=VENUES.find(x=>x.id===e.venueId);
@@ -536,8 +662,8 @@ function openEvtDetail(id){
   const items=[{action:'SUBMITTED',role:'Club Head',rmk:`Submitted for ${v?v.fullName||v.name:'?'}`,time:e.subAt,cls:''}];
   if(e.hodAt)items.push({action:e.status==='REJECTED_BY_HOD'?'REJECTED BY HOD':'APPROVED BY HOD',role:v?DEPTS[v.dept].hod:'HOD',rmk:e.hodRmk,time:e.hodAt,cls:e.status==='REJECTED_BY_HOD'?'rej':'appr'});
   if(e.prinAt)items.push({action:e.status==='REJECTED_BY_PRINCIPAL'?'REJECTED BY PRINCIPAL':'APPROVED BY PRINCIPAL',role:'Principal, NSSCE',rmk:e.prinRmk,time:e.prinAt,cls:e.status==='REJECTED_BY_PRINCIPAL'?'rej':'appr'});
-  const clr={'rej':'#DC2626','appr':'#16A34A','':'#7B1C1C'};
-  document.getElementById('ev-body').innerHTML=`<div style="padding:22px"><div class="info-box"><div class="ib-row" style="flex-wrap:wrap;gap:12px"><div><div class="ib-lbl">Venue</div><div class="ib-val">${v?v.fullName||v.name:'?'}</div></div><div><div class="ib-lbl">Club</div><div class="ib-val">${e.club}</div></div><div><div class="ib-lbl">Date &amp; Time</div><div class="ib-val">${fmtRange(e.sd,e.st,e.ed,e.et)}</div></div><div><div class="ib-lbl">Attendance</div><div class="ib-val">${e.att}</div></div><div><div class="ib-lbl">Category</div><div class="ib-val">${e.cat}</div></div><div><div class="ib-lbl">KTU Points</div><div class="ib-val">${e.ktu?e.ktuCat:'N/A'}</div></div></div>${e.desc?`<div style="margin-top:10px;font-size:13px;line-height:1.6">${e.desc}</div>`:''} ${e.spec?`<div style="margin-top:7px;font-size:12px;color:#6B7280"><b>Special:</b> ${e.spec}</div>`:''}</div><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#6B7280;margin-bottom:13px">Approval Trail</div><div class="audit">${items.map(i=>`<div class="a-item ${i.cls}"><div class="a-action" style="color:${clr[i.cls]||'#7B1C1C'}">${i.action}</div><div class="a-role">${i.role}</div>${i.rmk?`<div class="a-rmk">"${i.rmk}"</div>`:''}<div class="a-time">${fmtDT(i.time)}</div></div>`).join('')}</div></div>`;
+  const clr={'rej':'#f87171','appr':'#4ade80','':'#b91c1c'};
+  document.getElementById('ev-body').innerHTML=`<div style="padding:22px"><div class="info-box"><div class="ib-row" style="flex-wrap:wrap;gap:12px"><div><div class="ib-lbl">Venue</div><div class="ib-val">${v?v.fullName||v.name:'?'}</div></div><div><div class="ib-lbl">Club</div><div class="ib-val">${e.club}</div></div><div><div class="ib-lbl">Date & Time</div><div class="ib-val">${fmtRange(e.sd,e.st,e.ed,e.et)}</div></div><div><div class="ib-lbl">Attendance</div><div class="ib-val">${e.att}</div></div><div><div class="ib-lbl">Category</div><div class="ib-val">${e.cat}</div></div><div><div class="ib-lbl">KTU Points</div><div class="ib-val">${e.ktu?e.ktuCat:'N/A'}</div></div></div>${e.desc?`<div style="margin-top:10px;font-size:13px;line-height:1.6;color:var(--muted-foreground)">${e.desc}</div>`:''} ${e.spec?`<div style="margin-top:7px;font-size:12px;color:var(--muted-foreground)"><b>Special:</b> ${e.spec}</div>`:''}</div><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted-foreground);margin-bottom:13px">Approval Trail</div><div class="audit">${items.map(i=>`<div class="a-item ${i.cls}"><div class="a-action" style="color:${clr[i.cls]||'#b91c1c'}">${i.action}</div><div class="a-role">${i.role}</div>${i.rmk?`<div class="a-rmk">"${i.rmk}"</div>`:''}<div class="a-time">${fmtDT(i.time)}</div></div>`).join('')}</div></div>`;
   closeModal('pipeModal');openModal('evtModal');
 }
 function openModal(id){document.getElementById(id).classList.add('open')}
@@ -545,16 +671,16 @@ function closeModal(id){document.getElementById(id).classList.remove('open')}
 document.querySelectorAll('.moverlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)closeModal(o.id)}));
 document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;const open=[...document.querySelectorAll('.moverlay.open')];if(open.length)closeModal(open[open.length-1].id);else if(document.getElementById('vpanel').classList.contains('open'))closeVP()});
 function onRoleChange(){S.role=document.getElementById('roleSelect').value;updBadge();if(S.venueId)openVP(S.venueId)}
-const TICO={success:'\u2705',warning:'\u26A0\uFE0F',error:'\u274C',info:'\u2139\uFE0F'};
-function toast(msg,type='info',title=''){const c=document.getElementById('toasts');const t=document.createElement('div');t.className=`toast ${type}`;t.innerHTML=`<div class="toast-icon">${TICO[type]||'\u2139\uFE0F'}</div><div class="toast-cnt">${title?`<div class="toast-title">${title}</div>`:''}<div class="toast-msg">${msg}</div></div>`;c.appendChild(t);setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),260)},4200)}
+const TICO={success:'&#10003;',warning:'&#9888;',error:'&#10007;',info:'&#9432;'};
+function toast(msg,type='info',title=''){const c=document.getElementById('toasts');const t=document.createElement('div');t.className=`toast ${type}`;t.innerHTML=`<div class="toast-icon">${TICO[type]||'&#9432;'}</div><div class="toast-cnt">${title?`<div class="toast-title">${title}</div>`:''}<div class="toast-msg">${msg}</div></div>`;c.appendChild(t);setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),260)},4200)}
 function fmtDate(s){if(!s)return'\u2014';return new Date(s+'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}
 function fmtDT(s){if(!s)return'\u2014';return new Date(s).toLocaleString('en-IN',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}
 function fmtRange(sd,st,ed,et){return sd===ed?`${fmtDate(sd)}, ${st}\u2013${et}`:`${fmtDate(sd)} ${st} \u2013 ${fmtDate(ed)} ${et}`}
 function sbClass(s){const m={PENDING_HOD:'sbadge phod',PENDING_PRINCIPAL:'sbadge pprin',APPROVED:'sbadge appr',REJECTED_BY_HOD:'sbadge rej',REJECTED_BY_PRINCIPAL:'sbadge rej'};return m[s]||'sbadge'}
-function sbLabel(s){const m={PENDING_HOD:'Pending HOD',PENDING_PRINCIPAL:'Pending Principal',APPROVED:'Approved \u2713',REJECTED_BY_HOD:'Rejected by HOD',REJECTED_BY_PRINCIPAL:'Rejected by Principal'};return m[s]||s}
-function fIcon(f){const l=f.toLowerCase();if(l.includes('projector')||l.includes('lcd'))return'\uD83D\uDCFD\uFE0F';if(l.includes('smart board')||l.includes('smartboard'))return'\uD83D\uDCFA';if(l==='ac'||l.startsWith('ac '))return'\u2744\uFE0F';if(l.includes('pa system')||l.includes('sound'))return'\uD83D\uDD0A';if(l.includes('stage'))return'\uD83C\uDFAD';if(l.includes('green room'))return'\uD83D\uDEAA';if(l.includes('computer'))return'\uD83D\uDCBB';if(l.includes('whiteboard'))return'\uD83D\uDCCB';if(l.includes('podium'))return'\uD83C\uDFA4';if(l.includes('cad'))return'\uD83D\uDDA5\uFE0F';if(l.includes('cnc'))return'\u2699\uFE0F';if(l.includes('drafting'))return'\uD83D\uDCD0';if(l.includes('survey'))return'\uD83D\uDD2D';if(l.includes('hv')||l.includes('power supply')||l.includes('power equip'))return'\u26A1';if(l.includes('analog'))return'\uD83D\uDCFB';if(l.includes('circuit')||l.includes('breadboard'))return'\uD83D\uDD0C';if(l.includes('oscilloscope'))return'\uD83D\uDCE1';if(l.includes('natural light'))return'\u2600\uFE0F';if(l.includes('outdoor')||l.includes('open'))return'\uD83C\uDF3F';if(l.includes('safety'))return'\uD83E\uDDBA';if(l.includes('industry'))return'\uD83D\uDD27';if(l.includes('testing')||l.includes('research'))return'\uD83D\uDD2C';if(l.includes('large space'))return'\uD83C\uDFDF\uFE0F';return'\u2713'}
+function sbLabel(s){const m={PENDING_HOD:'Pending HOD',PENDING_PRINCIPAL:'Pending Principal',APPROVED:'Approved',REJECTED_BY_HOD:'Rejected by HOD',REJECTED_BY_PRINCIPAL:'Rejected by Principal'};return m[s]||s}
+function fIcon(f){const l=f.toLowerCase();if(l.includes('projector')||l.includes('lcd'))return'&#9654;';if(l.includes('smart board')||l.includes('smartboard'))return'&#9634;';if(l==='ac'||l.startsWith('ac '))return'&#10052;';if(l.includes('pa system')||l.includes('sound'))return'&#9654;';if(l.includes('stage'))return'&#9651;';if(l.includes('computer'))return'&#9632;';if(l.includes('whiteboard'))return'&#9633;';if(l.includes('podium'))return'&#9650;';return'&#10003;'}
 function resetDemo(){if(!confirm('Delete all event data and reload demo? Continue?'))return;localStorage.removeItem(KEY);seed();if(S.checked){S.avail=computeAvail(S.sd,S.st,S.ed,S.et)}refreshMap();updBadge();toast('Demo data has been reset','info','Reset Complete')}
-function init(){const today=new Date().toISOString().split('T')[0];document.getElementById('sd').value=today;document.getElementById('ed').value=today;seed();renderSVG();updBadge();setTimeout(()=>toast('Select a date/time range and click Check Availability to get started','info','Welcome to NSSCE Venue Booking \uD83D\uDC4B'),700)}
+function init(){const today=new Date().toISOString().split('T')[0];document.getElementById('sd').value=today;document.getElementById('ed').value=today;seed();renderSVG();updBadge();setTimeout(()=>toast('Select a date/time range and click Check Availability to get started','info','Welcome to NSSCE Venue Booking'),700)}
 init();
 </script>
 </body>

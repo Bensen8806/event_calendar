@@ -1,0 +1,203 @@
+'use client'
+
+import { useState } from 'react'
+import { format } from 'date-fns'
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { VenueWithDept } from "@/lib/types"
+
+interface RequestModalProps {
+  isOpen: boolean
+  onClose: () => void
+  venue: VenueWithDept | null
+  availability?: 'AVAILABLE' | 'PENDING' | 'BOOKED'
+  startDate: Date
+  endDate: Date
+  startTime: string
+  endTime: string
+  onBookingSuccess?: () => void
+}
+
+export default function RequestModal({ isOpen, onClose, venue, startDate, endDate, startTime, endTime, onBookingSuccess }: RequestModalProps) {
+  const [ktuPoints, setKtuPoints] = useState<boolean>(false)
+
+  if (!venue) return null
+
+  // A helper function to get department colors. Using primary for now.
+  const deptColor = "bg-primary"
+  
+  const formattedDate = startDate && endDate 
+    ? (startDate.getTime() === endDate.getTime() 
+        ? format(startDate, 'dd MMM yyyy') 
+        : `${format(startDate, 'dd MMM')} - ${format(endDate, 'dd MMM yyyy')}`)
+    : 'Unknown'
+  const timeRange = `${startTime} – ${endTime}`
+
+  const handleSubmit = () => {
+    if (!startDate || !endDate || !startTime || !endTime) return
+
+    const startStr = startDate.toISOString().split('T')[0]
+    const endStr = endDate.toISOString().split('T')[0]
+    const startIso = new Date(`${startStr}T${startTime}:00`).toISOString()
+    const endIso = new Date(`${endStr}T${endTime}:00`).toISOString()
+
+    const newBooking = {
+      id: Math.random().toString(36).substring(7),
+      venue_id: venue.id,
+      start_time: startIso,
+      end_time: endIso,
+      status: 'PENDING_HOD'
+    }
+
+    const existingStr = localStorage.getItem('dummy_events')
+    const existing = existingStr ? JSON.parse(existingStr) : []
+    existing.push(newBooking)
+    localStorage.setItem('dummy_events', JSON.stringify(existing))
+
+    if (onBookingSuccess) onBookingSuccess()
+    onClose()
+  }
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-[550px] p-0 overflow-hidden">
+        
+        {/* Header */}
+        <div className={`${deptColor} p-5 pb-6 text-primary-foreground relative`}>
+          <DialogTitle className="text-xl font-bold mb-1">New Venue Request</DialogTitle>
+          <div className="text-sm opacity-90">Requesting: {venue.name}</div>
+        </div>
+        
+        {/* Form Body */}
+        <div className="p-6 space-y-5 h-[65vh] overflow-y-auto">
+          
+          {/* Readonly Info Box */}
+          <div className="flex bg-muted/50 border rounded-md p-4 gap-6">
+            <div>
+              <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider mb-1">Venue</div>
+              <div className="text-sm font-semibold">{venue.name}</div>
+            </div>
+            <div>
+              <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider mb-1">Date</div>
+              <div className="text-sm font-semibold">{formattedDate}</div>
+            </div>
+            <div>
+              <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider mb-1">Time</div>
+              <div className="text-sm font-semibold">{timeRange}</div>
+            </div>
+          </div>
+
+          {/* Event Title */}
+          <div className="space-y-1.5">
+            <Label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Event Title *</Label>
+            <Input 
+              placeholder="e.g., IEEE Workshop on ML" 
+            />
+          </div>
+
+          {/* Description */}
+          <div className="space-y-1.5">
+            <Label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Description *</Label>
+            <Textarea 
+              placeholder="Objectives, expected outcomes..." 
+              className="min-h-[100px] resize-none" 
+            />
+          </div>
+
+          {/* Two Columns */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <Label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Organizing Club *</Label>
+              <Select>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select club..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="ieee">IEEE Student Chapter</SelectItem>
+                  <SelectItem value="nss">NSS</SelectItem>
+                  <SelectItem value="tinkerhub">TinkerHub</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Category *</Label>
+              <Select>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="technical">Technical</SelectItem>
+                  <SelectItem value="cultural">Cultural</SelectItem>
+                  <SelectItem value="sports">Sports</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {/* Two Columns */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <Label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Expected Attendance *</Label>
+              <Input 
+                type="number" 
+                placeholder="No. of attendees" 
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">KTU Activity Points?</Label>
+              <div className="flex gap-2">
+                <Button 
+                  variant={ktuPoints ? "default" : "outline"}
+                  onClick={() => setKtuPoints(true)}
+                  className="flex-1"
+                >
+                  Yes
+                </Button>
+                <Button 
+                  variant={!ktuPoints ? "default" : "outline"}
+                  onClick={() => setKtuPoints(false)}
+                  className="flex-1"
+                >
+                  No
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Special Requirements */}
+          <div className="space-y-1.5">
+            <Label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Special Requirements</Label>
+            <Textarea 
+              placeholder="Equipment, setup, external speakers..." 
+              className="min-h-[80px] resize-none" 
+            />
+          </div>
+        </div>
+        
+        {/* Footer */}
+        <div className="p-4 bg-muted/30 border-t flex justify-end gap-3">
+          <Button variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button onClick={handleSubmit}>
+            Submit for Approval →
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  )
+}

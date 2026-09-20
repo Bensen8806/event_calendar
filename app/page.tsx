@@ -1,0 +1,104 @@
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Map, Users, Server, User, UserCheck, MapPin } from 'lucide-react'
+
+export default function Home() {
+  return (
+    <div className="flex flex-col gap-24 py-16">
+      {/* Hero Section */}
+      <section className="container mx-auto px-4 text-center">
+        <h1 className="font-poppins text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
+          Campus Event & <span className="text-primary">Venue Booking</span> System
+        </h1>
+        <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
+          A structured, role-based system for submitting venue requests, tracking approvals, and publishing campus events — replacing paper-based processes entirely at NSS College of Engineering.
+        </p>
+        <div className="mt-10 flex justify-center gap-4">
+          <Link href="/login">
+            <Button size="lg" className="font-semibold">
+              Login to Dashboard
+            </Button>
+          </Link>
+          <Link href="/map">
+            <Button size="lg" variant="outline" className="font-semibold">
+              <Map className="mr-2 h-4 w-4" /> View Campus Map
+            </Button>
+          </Link>
+        </div>
+      </section>
+
+      {/* Roles Section */}
+      <section className="container mx-auto px-4 max-w-7xl">
+        <div className="mb-10 max-w-3xl">
+          <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-red-500 mb-3">Access Control</div>
+          <h2 className="font-poppins text-3xl font-bold tracking-tight mb-4">Role-based access</h2>
+          <p className="text-muted-foreground text-[15px] leading-relaxed max-w-xl">
+            Each user has a defined role that determines what they can see and do. A user can hold multiple roles simultaneously.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <Card className="bg-card/50">
+            <CardHeader className="p-5">
+              <div className="h-9 w-9 rounded-md bg-zinc-500/10 flex items-center justify-center mb-4">
+                <Server className="h-4 w-4 text-zinc-400" />
+              </div>
+              <CardTitle className="text-base mb-2">Admin</CardTitle>
+              <CardDescription className="text-xs leading-relaxed">
+                Manages users, roles, departments, and venue records across the entire system.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+          
+          <Card className="bg-card/50">
+            <CardHeader className="p-5">
+              <div className="h-9 w-9 rounded-md bg-blue-500/10 flex items-center justify-center mb-4">
+                <User className="h-4 w-4 text-blue-500" />
+              </div>
+              <CardTitle className="text-base mb-2">Principal</CardTitle>
+              <CardDescription className="text-xs leading-relaxed">
+                Views all events. Provides final approval or rejection with a mandatory remark.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+          
+          <Card className="bg-card/50">
+            <CardHeader className="p-5">
+              <div className="h-9 w-9 rounded-md bg-amber-500/10 flex items-center justify-center mb-4">
+                <Users className="h-4 w-4 text-amber-500" />
+              </div>
+              <CardTitle className="text-base mb-2">HOD</CardTitle>
+              <CardDescription className="text-xs leading-relaxed">
+                Reviews venue requests for their department only. Approves or rejects with a mandatory remark.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+          
+          <Card className="bg-card/50">
+            <CardHeader className="p-5">
+              <div className="h-9 w-9 rounded-md bg-red-500/10 flex items-center justify-center mb-4">
+                <MapPin className="h-4 w-4 text-red-500" />
+              </div>
+              <CardTitle className="text-base mb-2">Club Head</CardTitle>
+              <CardDescription className="text-xs leading-relaxed">
+                Creates events, selects venues on the map, tracks approval status, and marks attendance.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+          
+          <Card className="bg-card/50">
+            <CardHeader className="p-5">
+              <div className="h-9 w-9 rounded-md bg-green-500/10 flex items-center justify-center mb-4">
+                <UserCheck className="h-4 w-4 text-green-500" />
+              </div>
+              <CardTitle className="text-base mb-2">Student</CardTitle>
+              <CardDescription className="text-xs leading-relaxed">
+                Browses approved events, registers, and downloads participation certificates.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </div>
+      </section>
+    </div>
+  )
+}

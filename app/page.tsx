@@ -2,10 +2,36 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Map, Users, Server, User, UserCheck, MapPin } from 'lucide-react'
+import GradientWaves from '@/components/ui/GradientWaves'
 
 export default function Home() {
   return (
-    <div className="flex flex-col gap-24 py-16">
+    <div className="relative flex flex-col gap-24 py-16 min-h-[calc(100vh-4rem)]">
+      {/* Background Effect */}
+      <div className="absolute inset-0 -z-10 h-full w-full opacity-50">
+        <GradientWaves
+          horizonColor="#ff5627"
+          waveColor="#ff9fe6"
+          crestColor="#b16262"
+          speed={0.4}
+          amplitude={2.5}
+          waveScale={0.6}
+          waveRatio={0.9}
+          swell={35}
+          turbulence={20}
+          tilt={1.11}
+          zoom={1.0}
+          height={5.5}
+          fogDepth={15}
+          detail="medium"
+          brightness={1.0}
+          opacity={1.0}
+          mouseInteraction={true}
+          parallaxStrength={0.5}
+          grain={true}
+          grainIntensity={0.05}
+        />
+      </div>
       {/* Hero Section */}
       <section className="container mx-auto px-4 text-center">
         <h1 className="font-poppins text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">

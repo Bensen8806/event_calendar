@@ -42,12 +42,8 @@ export default function RootLayout({
           {/* Navigation Bar */}
           <nav className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="container mx-auto flex h-16 items-center justify-between px-4">
-              <Link href="/" className="flex items-center space-x-2">
-                <Image src="/logo.jpg" alt="NSSCE Logo" width={40} height={40} className="rounded-md object-contain bg-white p-1" />
-                <div className="hidden sm:block">
-                  <span className="font-poppins text-lg font-bold">NSSCE</span>
-                  <span className="ml-1 text-sm text-muted-foreground">Events</span>
-                </div>
+              <Link href="/" className="flex items-center">
+                <Image src="/logo.jpg" alt="NSSCE Logo" width={250} height={60} className="object-contain" priority />
               </Link>
               <div className="flex items-center space-x-4">
                 <Link href="/map" className={buttonVariants({ variant: "ghost" })}>

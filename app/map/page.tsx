@@ -57,7 +57,8 @@ export default function MapPage() {
     })
 
     if (overlappingEvents) {
-      overlappingEvents.forEach((event: { venue_id: string; status: string }) => {
+      overlappingEvents.forEach((event: { venue_id: string | null; status: string | null }) => {
+        if (!event.venue_id) return
         if (event.status === 'PENDING_HOD' || event.status === 'PENDING_PRINCIPAL') {
           newAvail[event.venue_id] = 'PENDING'
         } else {

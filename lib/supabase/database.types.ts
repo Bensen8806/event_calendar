@@ -319,6 +319,7 @@ export type Database = {
           email: string | null
           id: string
           name: string | null
+          requested_role: string | null
           role: string[] | null
           roll_number: string | null
         }
@@ -328,6 +329,7 @@ export type Database = {
           email?: string | null
           id: string
           name?: string | null
+          requested_role?: string | null
           role?: string[] | null
           roll_number?: string | null
         }
@@ -337,6 +339,7 @@ export type Database = {
           email?: string | null
           id?: string
           name?: string | null
+          requested_role?: string | null
           role?: string[] | null
           roll_number?: string | null
         }

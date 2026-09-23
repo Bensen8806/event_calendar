@@ -152,7 +152,7 @@ export default function RequestModal({ isOpen, onClose, venue, startDate, endDat
             </div>
             <div className="space-y-1.5">
               <Label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Category *</Label>
-              <Select value={category} onValueChange={setCategory}>
+              <Select value={category} onValueChange={(val) => setCategory(val as string)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select..." />
                 </SelectTrigger>

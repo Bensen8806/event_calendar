@@ -5,6 +5,13 @@ import { login, signup } from '@/app/actions/auth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 export default function LoginPage() {
   const [isLogin, setIsLogin] = useState(true)
@@ -30,15 +37,32 @@ export default function LoginPage() {
             {isLogin ? 'Welcome back' : 'Create an account'}
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            Only <span className="font-semibold text-primary">@nssce.ac.in</span> emails are allowed.
+            Students must use an <span className="font-semibold text-primary">@nssce.ac.in</span> email.
           </p>
         </div>
 
         <form action={handleSubmit} className="space-y-6">
           {!isLogin && (
-            <div className="space-y-2">
-              <Label htmlFor="name">Full Name</Label>
-              <Input id="name" name="name" placeholder="John Doe" required={!isLogin} />
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="name">Full Name</Label>
+                <Input id="name" name="name" placeholder="John Doe" required={!isLogin} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="requestedRole">Requested Role (Optional)</Label>
+                <Select name="requestedRole" defaultValue="STUDENT">
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="STUDENT">Student (Default)</SelectItem>
+                    <SelectItem value="CLUB_HEAD">Club Head</SelectItem>
+                    <SelectItem value="HOD">Head of Department (HoD)</SelectItem>
+                    <SelectItem value="PRINCIPAL">Principal</SelectItem>
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-muted-foreground mt-1">Special roles require admin approval.</p>
+              </div>
             </div>
           )}
           

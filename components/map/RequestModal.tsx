@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
+import { submitEventRequest } from '@/app/actions/events'
 import { format } from 'date-fns'
 import {
   Dialog,
@@ -35,6 +36,13 @@ interface RequestModalProps {
 export default function RequestModal({ isOpen, onClose, venue, startDate, endDate, startTime, endTime, onBookingSuccess }: RequestModalProps) {
   const [ktuPoints, setKtuPoints] = useState<boolean>(false)
 
+  const [isPending, startTransition] = useTransition()
+  const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
+  const [category, setCategory] = useState('')
+  const [expectedAttendance, setExpectedAttendance] = useState('')
+  const [specialRequirements, setSpecialRequirements] = useState('')
+
   if (!venue) return null
 
   // A helper function to get department colors. Using primary for now.
@@ -55,21 +63,26 @@ export default function RequestModal({ isOpen, onClose, venue, startDate, endDat
     const startIso = new Date(`${startStr}T${startTime}:00`).toISOString()
     const endIso = new Date(`${endStr}T${endTime}:00`).toISOString()
 
-    const newBooking = {
-      id: Math.random().toString(36).substring(7),
-      venue_id: venue.id,
-      start_time: startIso,
-      end_time: endIso,
-      status: 'PENDING_HOD'
-    }
+    startTransition(async () => {
+      const result = await submitEventRequest({
+        title,
+        description,
+        venueId: venue.id,
+        startIso,
+        endIso,
+        expectedAttendance: parseInt(expectedAttendance) || 0,
+        category,
+        ktuPoints,
+        specialRequirements
+      })
 
-    const existingStr = localStorage.getItem('dummy_events')
-    const existing = existingStr ? JSON.parse(existingStr) : []
-    existing.push(newBooking)
-    localStorage.setItem('dummy_events', JSON.stringify(existing))
-
-    if (onBookingSuccess) onBookingSuccess()
-    onClose()
+      if (result.error) {
+        alert(result.error)
+      } else {
+        if (onBookingSuccess) onBookingSuccess()
+        onClose()
+      }
+    })
   }
 
   return (
@@ -106,6 +119,8 @@ export default function RequestModal({ isOpen, onClose, venue, startDate, endDat
             <Label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Event Title *</Label>
             <Input 
               placeholder="e.g., IEEE Workshop on ML" 
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
             />
           </div>
 
@@ -115,6 +130,8 @@ export default function RequestModal({ isOpen, onClose, venue, startDate, endDat
             <Textarea 
               placeholder="Objectives, expected outcomes..." 
               className="min-h-[100px] resize-none" 
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
             />
           </div>
 
@@ -135,14 +152,14 @@ export default function RequestModal({ isOpen, onClose, venue, startDate, endDat
             </div>
             <div className="space-y-1.5">
               <Label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Category *</Label>
-              <Select>
+              <Select value={category} onValueChange={setCategory}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select..." />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="technical">Technical</SelectItem>
-                  <SelectItem value="cultural">Cultural</SelectItem>
-                  <SelectItem value="sports">Sports</SelectItem>
+                  <SelectItem value="TECHNICAL">Technical</SelectItem>
+                  <SelectItem value="CULTURAL">Cultural</SelectItem>
+                  <SelectItem value="SPORTS">Sports</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -155,6 +172,8 @@ export default function RequestModal({ isOpen, onClose, venue, startDate, endDat
               <Input 
                 type="number" 
                 placeholder="No. of attendees" 
+                value={expectedAttendance}
+                onChange={(e) => setExpectedAttendance(e.target.value)}
               />
             </div>
             <div className="space-y-1.5">
@@ -184,6 +203,8 @@ export default function RequestModal({ isOpen, onClose, venue, startDate, endDat
             <Textarea 
               placeholder="Equipment, setup, external speakers..." 
               className="min-h-[80px] resize-none" 
+              value={specialRequirements}
+              onChange={(e) => setSpecialRequirements(e.target.value)}
             />
           </div>
         </div>
@@ -193,8 +214,8 @@ export default function RequestModal({ isOpen, onClose, venue, startDate, endDat
           <Button variant="outline" onClick={onClose}>
             Cancel
           </Button>
-          <Button onClick={handleSubmit}>
-            Submit for Approval →
+          <Button onClick={handleSubmit} disabled={isPending}>
+            {isPending ? 'Submitting...' : 'Submit for Approval →'}
           </Button>
         </div>
       </DialogContent>

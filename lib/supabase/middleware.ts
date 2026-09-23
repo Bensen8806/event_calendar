@@ -27,8 +27,40 @@ export async function updateSession(request: NextRequest) {
     }
   )
 
-  // Refresh session if expired
-  await supabase.auth.getUser()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  const url = request.nextUrl.clone()
+  const isProtected = url.pathname.startsWith('/admin') || 
+                      url.pathname.startsWith('/principal') || 
+                      url.pathname.startsWith('/hod') || 
+                      url.pathname.startsWith('/club') || 
+                      url.pathname.startsWith('/student')
+
+  if (!user && isProtected) {
+    url.pathname = '/login'
+    const redirectResponse = NextResponse.redirect(url)
+    supabaseResponse.cookies.getAll().forEach(cookie => {
+      redirectResponse.cookies.set(cookie.name, cookie.value)
+    })
+    return redirectResponse
+  }
+
+  if (user && url.pathname === '/login') {
+    const { data } = await supabase.from('users').select('role').eq('id', user.id).single()
+    const roles = data?.role || ['STUDENT']
+    
+    if (roles.includes('ADMIN')) url.pathname = '/admin/dashboard'
+    else if (roles.includes('PRINCIPAL')) url.pathname = '/principal/dashboard'
+    else if (roles.includes('HOD')) url.pathname = '/hod/dashboard'
+    else if (roles.includes('CLUB_HEAD')) url.pathname = '/club/dashboard'
+    else url.pathname = '/student/dashboard'
+
+    const redirectResponse = NextResponse.redirect(url)
+    supabaseResponse.cookies.getAll().forEach(cookie => {
+      redirectResponse.cookies.set(cookie.name, cookie.value)
+    })
+    return redirectResponse
+  }
 
   return supabaseResponse
 }

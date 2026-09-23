@@ -41,9 +41,13 @@ export default function MapPage() {
     const startIso = new Date(`${startStr}T${startTime}:00`).toISOString()
     const endIso = new Date(`${endStr}T${endTime}:00`).toISOString()
 
-    const existingStr = localStorage.getItem('dummy_events')
-    const existing = existingStr ? JSON.parse(existingStr) : []
-    
+    const supabase = createClient()
+    const { data: overlappingEvents } = await supabase
+      .from('events')
+      .select('venue_id, status')
+      .lt('start_time', endIso)
+      .gt('end_time', startIso)
+
     // Check overlaps
     const newAvail: AvailabilityState = {}
     
@@ -52,22 +56,15 @@ export default function MapPage() {
       newAvail[v.id] = 'AVAILABLE'
     })
 
-    const checkStart = new Date(startIso).getTime()
-    const checkEnd = new Date(endIso).getTime()
-
-    existing.forEach((event: { venue_id: string; start_time: string; end_time: string; status: string }) => {
-      const eventStart = new Date(event.start_time).getTime()
-      const eventEnd = new Date(event.end_time).getTime()
-
-      // Overlap condition
-      if (checkStart < eventEnd && checkEnd > eventStart) {
+    if (overlappingEvents) {
+      overlappingEvents.forEach((event: { venue_id: string; status: string }) => {
         if (event.status === 'PENDING_HOD' || event.status === 'PENDING_PRINCIPAL') {
           newAvail[event.venue_id] = 'PENDING'
         } else {
           newAvail[event.venue_id] = 'BOOKED'
         }
-      }
-    })
+      })
+    }
 
     setAvailability(newAvail)
     setIsChecked(true)
